@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE-DataTracker", "AE-DataTracker\AE-DataTracker.csproj", "{20B1ED39-99AA-4E9E-8AEA-4029B4677243}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20B1ED39-99AA-4E9E-8AEA-4029B4677243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20B1ED39-99AA-4E9E-8AEA-4029B4677243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20B1ED39-99AA-4E9E-8AEA-4029B4677243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20B1ED39-99AA-4E9E-8AEA-4029B4677243}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6BF12389-8869-4559-BEB8-33E77F5CDBA4}
+	EndGlobalSection
+EndGlobal
