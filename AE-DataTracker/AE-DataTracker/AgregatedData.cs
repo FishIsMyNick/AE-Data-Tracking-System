@@ -11,6 +11,8 @@ namespace AE_DataTracker
     public class AgregatedData
     {
         public List<RunData> runDataList;
+        public DateTime firstEntry;
+        public DateTime lastEntry;
 
         public string runsWon;
         public string runsLost;

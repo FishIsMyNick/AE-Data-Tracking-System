@@ -13,6 +13,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
@@ -36,7 +37,12 @@
                     FontSize="35"
                     Padding="0 -15 0 0"
                     Click="CloseButton_Click"/>
-        <Grid Grid.Row="1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <RadioButton GroupName="WinConditionFilterRBG" Name="AllRB" Margin="10" Content="All" Click="AllRB_Click" IsChecked="True"/>
+            <RadioButton GroupName="WinConditionFilterRBG" Name="WinRB" Margin="10" Content="Win" Click="WinRB_Click" IsChecked="False"/>
+            <RadioButton GroupName="WinConditionFilterRBG" Name="LossRB" Margin="10" Content="Loss" Click="LossRB_Click" IsChecked="False"/>
+        </StackPanel>
+        <Grid Grid.Row="2">
             <TabControl>
                 <!-- Agregated Data -->
                 <TabItem Header="Agregated Data">
@@ -368,7 +374,7 @@
 
         </Grid>
 
-        <Grid Grid.Row="2"
+        <Grid Grid.Row="3"
               Background="LightGray">
             <Label Name="StatusLabel" 
                    HorizontalAlignment="Right"
