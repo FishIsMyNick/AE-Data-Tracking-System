@@ -107,11 +107,20 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         // Agregated data
         agregatedData = new AgregatedData();
         if(AllRB.IsChecked == true)
+        {
             agregatedData.InitializeData(RunData);
+            AllDataListView.ItemsSource = RunData;
+        }
         else if (WinRB.IsChecked == true)
+        {
             agregatedData.InitializeData(RunData.Where(r => r.runWon).ToList());
+            AllDataListView.ItemsSource = RunData.Where(r => r.runWon).ToList();
+        }
         else if (LossRB.IsChecked == true)
+        {
             agregatedData.InitializeData(RunData.Where(r => !r.runWon).ToList());
+            AllDataListView.ItemsSource = RunData.Where(r => !r.runWon).ToList();
+        }
         agregatedData.firstEntry = firstEntry;
         agregatedData.lastEntry = lastEntry;
         UpdateAggregatedData(agregatedData);
@@ -416,6 +425,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
             return;
         agregatedData.InitializeData(RunData);
         UpdateAggregatedData(agregatedData);
+
+        AllDataListView.ItemsSource = RunData;
     }
 
     private void WinRB_Click(object sender, RoutedEventArgs e)
@@ -424,6 +435,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
             return;
         agregatedData.InitializeData(RunData.Where(r => r.runWon).ToList());
         UpdateAggregatedData(agregatedData);
+
+        AllDataListView.ItemsSource = RunData.Where(r => r.runWon).ToList();
     }
 
     private void LossRB_Click(object sender, RoutedEventArgs e)
@@ -432,5 +445,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
             return;
         agregatedData.InitializeData(RunData.Where(r => !r.runWon).ToList());
         UpdateAggregatedData(agregatedData);
+
+        AllDataListView.ItemsSource = RunData.Where(r => !r.runWon).ToList();
     }
 }
