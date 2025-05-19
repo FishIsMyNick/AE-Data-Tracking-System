@@ -19,12 +19,12 @@ public class RunData
     public int easyLocations;
     public string easyLocationsString => easyLocations.ToString();
     public int mediumLocations;
-    public string mediumLocationString => mediumLocations.ToString();
+    public string mediumLocationsString => mediumLocations.ToString();
     public int hardLocations;
     public string hardLocationsString => hardLocations.ToString();
     public int scrapCollected;
 
-    public int cannonLocations;
+    public int cannonLocations; 
     public string cannonLocationsString => cannonLocations.ToString();
     public int moduleLocations;
     public string moduleLocationsString => moduleLocations.ToString();

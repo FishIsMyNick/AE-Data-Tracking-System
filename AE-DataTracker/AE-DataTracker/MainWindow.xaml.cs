@@ -2,6 +2,7 @@
 using MailKit.Net.Imap;
 using MailKit.Search;
 using MimeKit;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -34,6 +35,16 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        if (!Directory.Exists(csvDumpDirectory))
+        {
+            Directory.CreateDirectory(csvDumpDirectory);
+        }
+
+        if (!Directory.Exists(saveDirectory))
+        {
+            Directory.CreateDirectory(saveDirectory);
+        }
     }
 
     private const string email = "luxlupus1997@gmail.com";
@@ -142,7 +153,6 @@ public partial class MainWindow : Window
             client.Disconnect(true);
         }
     }
-
 
 
     private void SaveData_Click(object sender, RoutedEventArgs e)
@@ -315,7 +325,7 @@ public partial class MainWindow : Window
 
         foreach (string radar in kvps["RadarUpgrades"].Split('|'))
             if (radar != "")
-            runData.radarUpgrades.Add(radar);
+                runData.radarUpgrades.Add(radar);
 
         foreach (string damage in kvps["DamageByEnemy"].Split('|'))
         {
@@ -377,6 +387,7 @@ public partial class MainWindow : Window
     }
     #endregion
 
+    #region Update UI Elements
     private void UpdateAggregatedData(AgregatedData data)
     {
         UpdateBasicAgregatedData(data);
@@ -518,10 +529,78 @@ public partial class MainWindow : Window
 
     private void UpdateListData(AgregatedData data)
     {
-        AggrModules.ItemsSource = data.modulesAggr;
-        AggrUpgrades.ItemsSource = data.upgradesAggr;
-        AggrRelics.ItemsSource = data.relicsAggr;
-        AggrRadarUpgrades.ItemsSource = data.radarAggr;
-        AggrDamageByEnemy.ItemsSource = data.damageByEnemyAggr;
+        AggrModules.ItemsSource = GetSortedCollectionFromDict(data.modulesAggr);
+        AggrUpgrades.ItemsSource = GetSortedCollectionFromDict(data.upgradesAggr);
+        AggrRelics.ItemsSource = GetSortedCollectionFromDict(data.relicsAggr);
+        AggrRadarUpgrades.ItemsSource = GetSortedCollectionFromDict(data.radarAggr);
+        AggrDamageByEnemy.ItemsSource = GetSortedCollectionFromDict(data.damageByEnemyAggr);
     }
+    #endregion
+
+    #region Sorting and Filtering
+    private List<List3ValueViewModel> GetSortedCollectionFromDict(Dictionary<string, ifPair> dict)
+    {
+        List<List3ValueViewModel> list = new List<List3ValueViewModel>();
+        foreach (var kvp in dict)
+        {
+            list.Add(new List3ValueViewModel(kvp.Key, kvp.Value.count.ToString(), kvp.Value.average.ToString("0.##")));
+        }
+
+        return list.OrderByDescending(item =>
+        {
+            // Attempt numeric sort
+            if (double.TryParse(item.Value3, out double num))
+                return num;
+
+            // Fallback to lexicographic order
+            return double.MaxValue;
+        })
+        .ThenBy(item => item.Value3) // Secondary sort for non-numeric
+        .ToList();
+    }
+
+    private List<List3ValueViewModel> GetSortedCollectionFromDict(Dictionary<string, ffPair> dict)
+    {
+        List<List3ValueViewModel> list = new List<List3ValueViewModel>();
+        foreach (var kvp in dict)
+        {
+            list.Add(new List3ValueViewModel(kvp.Key, kvp.Value.count.ToString("0.##"), kvp.Value.average.ToString("0.##")));
+        }
+
+        return list.OrderByDescending(item =>
+        {
+            // Attempt numeric sort
+            if (double.TryParse(item.Value3, out double num))
+                return num;
+
+            // Fallback to lexicographic order
+            return double.MaxValue;
+        })
+        .ThenBy(item => item.Value3) // Secondary sort for non-numeric
+        .ToList();
+    }
+
+    private void UpgradeFilterTB_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (agregatedData is null || agregatedData.upgradesAggr is null || agregatedData.upgradesAggr.Count == 0)
+            return;
+
+        if (e.Key == Key.Enter)
+        {
+            string filterString = UpgradeFilterTB.Text.ToLower();
+            if (string.IsNullOrEmpty(filterString))
+            {
+                AggrUpgrades.ItemsSource = null;
+                AggrUpgrades.ItemsSource = GetSortedCollectionFromDict(agregatedData.upgradesAggr);
+            }
+            else
+            {
+                var filteredList = agregatedData.upgradesAggr.Where(x => x.Key.ToLower().Contains(filterString)).ToDictionary();
+                AggrUpgrades.ItemsSource = null;
+                AggrUpgrades.ItemsSource = GetSortedCollectionFromDict(filteredList);
+            }
+        }
+    }
+
+    #endregion
 }

@@ -46,7 +46,8 @@
             <TabControl>
                 <!-- Agregated Data -->
                 <TabItem Header="Agregated Data">
-                    <Grid x:Name="AgregatedDataGrid">
+                    <Grid x:Name="AgregatedDataGrid"
+                          Margin="0 25 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="2*"/>
@@ -285,45 +286,55 @@
                                 <ListView x:Name="AggrModules">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Module Name" Width="150" DisplayMemberBinding="{Binding Key}" />
-                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
-                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
+                                            <GridViewColumn Header="Module Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
+                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value2}" />
+                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value3}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <ListView x:Name="AggrUpgrades" Grid.Column="1">
+                                <StackPanel Grid.Column ="1"
+                                            Margin="0 -25 0 0">
+                                    <TextBox x:Name="UpgradeFilterTB"
+                                               Width="300"
+                                               Height="25"
+                                               FontSize="16"
+                                               Background="#eeeeee"
+                                               HorizontalAlignment="Left"
+                                               PreviewKeyDown="UpgradeFilterTB_PreviewKeyDown"/>
+                                    <ListView x:Name="AggrUpgrades">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Upgrade Name" Width="150" DisplayMemberBinding="{Binding Key}" />
-                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
-                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
+                                            <GridViewColumn Header="Upgrade Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
+                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value2}" />
+                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value3}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
+                                </StackPanel>
                                 <ListView x:Name="AggrRelics" Grid.Row="1">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Relic Name" Width="150" DisplayMemberBinding="{Binding Key}" />
-                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
-                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
+                                            <GridViewColumn Header="Relic Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
+                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value2}" />
+                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value3}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <ListView x:Name="AggrDamageByEnemy" Grid.Row="1" Grid.Column="1">
+                                <ListView x:Name="AggrRadarUpgrades" Grid.Row="1" Grid.Column="1">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Enemy Name" Width="150" DisplayMemberBinding="{Binding Key}" />
-                                            <GridViewColumn Header="Total Damage" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
-                                            <GridViewColumn Header="Average Damage per Run" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
+                                            <GridViewColumn Header="Radar Upgrade Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
+                                            <GridViewColumn Header="Times Taken" Width="150" DisplayMemberBinding="{Binding Value2}" />
+                                            <GridViewColumn Header="Take %" Width="150" DisplayMemberBinding="{Binding Value3}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <ListView x:Name="AggrRadarUpgrades" Grid.Row="2" Grid.Column="0">
+                                <ListView x:Name="AggrDamageByEnemy" Grid.Row="2" Grid.Column="0">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Radar Upgrade Name" Width="150" DisplayMemberBinding="{Binding Key}" />
-                                            <GridViewColumn Header="Times Taken" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
-                                            <GridViewColumn Header="Take %" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
+                                            <GridViewColumn Header="Enemy Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
+                                            <GridViewColumn Header="Total Damage" Width="150" DisplayMemberBinding="{Binding Value2}" />
+                                            <GridViewColumn Header="Average Damage per Run" Width="150" DisplayMemberBinding="{Binding Value3}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
@@ -341,7 +352,6 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Round Won" Width="Auto" DisplayMemberBinding="{Binding runWonString}" />
-                                    <GridViewColumn Header="Locations Visited" Width="Auto" DisplayMemberBinding="{Binding locationsVisitedString}" />
                                     <GridViewColumn Header="Easy Locations" Width="Auto" DisplayMemberBinding="{Binding easyLocationsString}" />
                                     <GridViewColumn Header="Medium Locations" Width="Auto" DisplayMemberBinding="{Binding mediumLocationsString}" />
                                     <GridViewColumn Header="Hard Locations" Width="Auto" DisplayMemberBinding="{Binding hardLocationsString}" />
