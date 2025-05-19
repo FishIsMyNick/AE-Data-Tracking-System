@@ -30,6 +30,26 @@ namespace AE_DataTracker
         public string hardLocationsMaximum;
         public string hardLocationsAverage;
 
+        public string cannonLocationsMinimum;
+        public string cannonLocationsMaximum;
+        public string cannonLocationsAverage;
+
+        public string moduleLocationsMinimum;
+        public string moduleLocationsMaximum;
+        public string moduleLocationsAverage;
+
+        public string upgradeLocationsMinimum;
+        public string upgradeLocationsMaximum;
+        public string upgradeLocationsAverage;
+
+        public string relicLocationsMinimum;
+        public string relicLocationsMaximum;
+        public string relicLocationsAverage;
+
+        public string shopLocationsMinimum;
+        public string shopLocationsMaximum;
+        public string shopLocationsAverage;
+
         public string scrapCollectedMinimum;
         public string scrapCollectedMaximum;
         public string scrapCollectedAverage;
@@ -101,6 +121,7 @@ namespace AE_DataTracker
         public Dictionary<string, ifPair> modulesAggr;
         public Dictionary<string, ifPair> upgradesAggr;
         public Dictionary<string, ifPair> relicsAggr;
+        public Dictionary<string, ifPair> radarAggr;
         public Dictionary<string, ifPair> locationsAggr;
         public Dictionary<string, ffPair> damageByEnemyAggr;
 
@@ -142,6 +163,26 @@ namespace AE_DataTracker
             hardLocationsMinimum = runDataList.Min(r => r.hardLocations).ToString();
             hardLocationsMaximum = runDataList.Max(r => r.hardLocations).ToString();
             hardLocationsAverage = runDataList.Average(r => r.hardLocations).ToString("F2");
+
+            cannonLocationsMinimum = runDataList.Min(r => r.cannonLocations).ToString();
+            cannonLocationsMaximum = runDataList.Max(r => r.cannonLocations).ToString();
+            cannonLocationsAverage = runDataList.Average(r => r.cannonLocations).ToString("F2");
+
+            moduleLocationsMinimum = runDataList.Min(r => r.moduleLocations).ToString();
+            moduleLocationsMaximum = runDataList.Max(r => r.moduleLocations).ToString();
+            moduleLocationsAverage = runDataList.Average(r => r.moduleLocations).ToString("F2");
+
+            upgradeLocationsMinimum = runDataList.Min(r => r.upgradeLocations).ToString();
+            upgradeLocationsMaximum = runDataList.Max(r => r.upgradeLocations).ToString();
+            upgradeLocationsAverage = runDataList.Average(r => r.upgradeLocations).ToString("F2");
+
+            relicLocationsMinimum = runDataList.Min(r => r.relicLocations).ToString();
+            relicLocationsMaximum = runDataList.Max(r => r.relicLocations).ToString();
+            relicLocationsAverage = runDataList.Average(r => r.relicLocations).ToString("F2");
+
+            shopLocationsMinimum = runDataList.Min(r => r.shopLocations).ToString();
+            shopLocationsMaximum = runDataList.Max(r => r.shopLocations).ToString();
+            shopLocationsAverage = runDataList.Average(r => r.shopLocations).ToString("F2");
 
             scrapCollectedMinimum = runDataList.Min(r => r.scrapCollected).ToString();
             scrapCollectedMaximum = runDataList.Max(r => r.scrapCollected).ToString();
@@ -219,6 +260,7 @@ namespace AE_DataTracker
             Dictionary<string, ifPair> modules = new Dictionary<string, ifPair>();
             Dictionary<string, ifPair> upgrades = new Dictionary<string, ifPair>();
             Dictionary<string, ifPair> relics = new Dictionary<string, ifPair>();
+            Dictionary<string, ifPair> radars = new Dictionary<string, ifPair>();
             Dictionary<string, ifPair> locations = new Dictionary<string, ifPair>();
             Dictionary<string, List<float>> damageByEnemy = new Dictionary<string, List<float>>();
             Dictionary<string, ffPair> damageByEnemyAgr = new Dictionary<string, ffPair>();
@@ -256,6 +298,14 @@ namespace AE_DataTracker
 
                     locations[runLocation].count++;
                 }
+
+                foreach(var radar in radars)
+                {
+                    if(!radars.ContainsKey(radar.Key))
+                        radars.Add(radar.Key, new ifPair { count = 0, average = 0 });
+
+                    radars[radar.Key].count++;
+                }
             }
             foreach (var module in modules.Values)
             {
@@ -272,6 +322,10 @@ namespace AE_DataTracker
             foreach (var location in locations.Values)
             {
                 location.average = location.count / totalRuns * 100;
+            }
+            foreach(var radar in radars.Values)
+            {
+                radar.average = radar.count / totalRuns * 100;
             }
 
             foreach (var run in runDataList)
@@ -293,6 +347,7 @@ namespace AE_DataTracker
             upgradesAggr = upgrades;
             relicsAggr = relics;
             locationsAggr = locations;
+            radarAggr = radars;
             damageByEnemyAggr = damageByEnemyAgr;
         }
 

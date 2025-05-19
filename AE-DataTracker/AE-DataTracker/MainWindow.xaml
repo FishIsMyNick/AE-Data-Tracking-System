@@ -93,6 +93,11 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                     <!-- Header -->
                                     <!-- Rows 1 to 33: one per data row -->
                                 </Grid.RowDefinitions>
@@ -104,7 +109,6 @@
                                 <TextBlock Grid.Row="0" Grid.Column="3" Text="Average" FontWeight="Bold" HorizontalAlignment="Center"/>
 
                                 <!-- Data rows -->
-                                <!-- 1 -->
                                 <!-- 1 -->
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Win Rate" Margin="2"/>
                                 <TextBlock x:Name="runsLostTB" Grid.Row="1" Grid.Column="1" Margin="2"/>
@@ -130,106 +134,135 @@
                                 <TextBlock x:Name="hardLocationsAvgTB" Grid.Row="4" Grid.Column="3" Margin="2"/>
 
                                 <!-- 5 -->
-                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Scrap Collected" Margin="2"/>
-                                <TextBlock x:Name="scrapCollectedMinTB" Grid.Row="5" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapCollectedMaxTB" Grid.Row="5" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapCollectedAvgTB" Grid.Row="5" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Cannon Locations" Margin="2"/>
+                                <TextBlock x:Name="cannonLocationsMinTB" Grid.Row="5" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="cannonLocationsMaxTB" Grid.Row="5" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="cannonLocationsAvgTB" Grid.Row="5" Grid.Column="3" Margin="2"/>
 
                                 <!-- 6 -->
-                                <TextBlock Grid.Row="6" Grid.Column="0" Text="Ammo Collected" Margin="2"/>
-                                <TextBlock x:Name="ammoCollectedMinTB" Grid.Row="6" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="ammoCollectedMaxTB" Grid.Row="6" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="ammoCollectedAvgTB" Grid.Row="6" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="Module Locations" Margin="2"/>
+                                <TextBlock x:Name="moduleLocationsMinTB" Grid.Row="6" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="moduleLocationsMaxTB" Grid.Row="6" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="moduleLocationsAvgTB" Grid.Row="6" Grid.Column="3" Margin="2"/>
 
                                 <!-- 7 -->
-                                <TextBlock Grid.Row="7" Grid.Column="0" Text="Scrap Used - Wagons" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedWagonsMinTB" Grid.Row="7" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedWagonsMaxTB" Grid.Row="7" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedWagonsAvgTB" Grid.Row="7" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="7" Grid.Column="0" Text="Upgrade Locations" Margin="2"/>
+                                <TextBlock x:Name="upgradeLocationsMinTB" Grid.Row="7" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="upgradeLocationsMaxTB" Grid.Row="7" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="upgradeLocationsAvgTB" Grid.Row="7" Grid.Column="3" Margin="2"/>
 
                                 <!-- 8 -->
-                                <TextBlock Grid.Row="8" Grid.Column="0" Text="Scrap Used - Ammo" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedAmmoMinTB" Grid.Row="8" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedAmmoMaxTB" Grid.Row="8" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedAmmoAvgTB" Grid.Row="8" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="8" Grid.Column="0" Text="Relic Locations" Margin="2"/>
+                                <TextBlock x:Name="relicLocationsMinTB" Grid.Row="8" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="relicLocationsMaxTB" Grid.Row="8" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="relicLocationsAvgTB" Grid.Row="8" Grid.Column="3" Margin="2"/>
 
                                 <!-- 9 -->
-                                <TextBlock Grid.Row="9" Grid.Column="0" Text="Scrap Used - Repair" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedRepairMinTB" Grid.Row="9" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedRepairMaxTB" Grid.Row="9" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedRepairAvgTB" Grid.Row="9" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="9" Grid.Column="0" Text="Shop Locations" Margin="2"/>
+                                <TextBlock x:Name="shopLocationsMinTB" Grid.Row="9" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="shopLocationsMaxTB" Grid.Row="9" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="shopLocationsAvgTB" Grid.Row="9" Grid.Column="3" Margin="2"/>
 
                                 <!-- 10 -->
-                                <TextBlock Grid.Row="10" Grid.Column="0" Text="Scrap Used - Upgrades" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedUpgradesMinTB" Grid.Row="10" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedUpgradesMaxTB" Grid.Row="10" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedUpgradesAvgTB" Grid.Row="10" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="10" Grid.Column="0" Text="Scrap Collected" Margin="2"/>
+                                <TextBlock x:Name="scrapCollectedMinTB" Grid.Row="10" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="scrapCollectedMaxTB" Grid.Row="10" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="scrapCollectedAvgTB" Grid.Row="10" Grid.Column="3" Margin="2"/>
 
                                 <!-- 11 -->
-                                <TextBlock Grid.Row="11" Grid.Column="0" Text="Ammo Used" Margin="2"/>
-                                <TextBlock x:Name="ammoUsedMinTB" Grid.Row="11" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="ammoUsedMaxTB" Grid.Row="11" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="ammoUsedAvgTB" Grid.Row="11" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="11" Grid.Column="0" Text="Ammo Collected" Margin="2"/>
+                                <TextBlock x:Name="ammoCollectedMinTB" Grid.Row="11" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="ammoCollectedMaxTB" Grid.Row="11" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="ammoCollectedAvgTB" Grid.Row="11" Grid.Column="3" Margin="2"/>
 
                                 <!-- 12 -->
-                                <TextBlock Grid.Row="12" Grid.Column="0" Text="Bosses Killed" Margin="2"/>
-                                <TextBlock x:Name="bossesKilledMinTB" Grid.Row="12" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="bossesKilledMaxTB" Grid.Row="12" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="bossesKilledAvgTB" Grid.Row="12" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="12" Grid.Column="0" Text="Scrap Used - Wagons" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedWagonsMinTB" Grid.Row="12" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedWagonsMaxTB" Grid.Row="12" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedWagonsAvgTB" Grid.Row="12" Grid.Column="3" Margin="2"/>
 
                                 <!-- 13 -->
-                                <TextBlock Grid.Row="13" Grid.Column="0" Text="Final Hull" Margin="2"/>
-                                <TextBlock x:Name="finalHullMinTB" Grid.Row="13" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="finalHullMaxTB" Grid.Row="13" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="finalHullAvgTB" Grid.Row="13" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="13" Grid.Column="0" Text="Scrap Used - Ammo" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedAmmoMinTB" Grid.Row="13" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedAmmoMaxTB" Grid.Row="13" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedAmmoAvgTB" Grid.Row="13" Grid.Column="3" Margin="2"/>
 
                                 <!-- 14 -->
-                                <TextBlock Grid.Row="14" Grid.Column="0" Text="Regular Damage Taken" Margin="2"/>
-                                <TextBlock x:Name="regularDamageTakenMinTB" Grid.Row="14" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="regularDamageTakenMaxTB" Grid.Row="14" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="regularDamageTakenAvgTB" Grid.Row="14" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="14" Grid.Column="0" Text="Scrap Used - Repair" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedRepairMinTB" Grid.Row="14" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedRepairMaxTB" Grid.Row="14" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedRepairAvgTB" Grid.Row="14" Grid.Column="3" Margin="2"/>
 
                                 <!-- 15 -->
-                                <TextBlock Grid.Row="15" Grid.Column="0" Text="Hull Damage Taken" Margin="2"/>
-                                <TextBlock x:Name="hullDamageTakenMinTB" Grid.Row="15" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="hullDamageTakenMaxTB" Grid.Row="15" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="hullDamageTakenAvgTB" Grid.Row="15" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="15" Grid.Column="0" Text="Scrap Used - Upgrades" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedUpgradesMinTB" Grid.Row="15" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedUpgradesMaxTB" Grid.Row="15" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="scrapUsedUpgradesAvgTB" Grid.Row="15" Grid.Column="3" Margin="2"/>
 
                                 <!-- 16 -->
-                                <TextBlock Grid.Row="16" Grid.Column="0" Text="Damage Repaired" Margin="2"/>
-                                <TextBlock x:Name="damageRepairedMinTB" Grid.Row="16" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="damageRepairedMaxTB" Grid.Row="16" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="damageRepairedAvgTB" Grid.Row="16" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="16" Grid.Column="0" Text="Ammo Used" Margin="2"/>
+                                <TextBlock x:Name="ammoUsedMinTB" Grid.Row="16" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="ammoUsedMaxTB" Grid.Row="16" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="ammoUsedAvgTB" Grid.Row="16" Grid.Column="3" Margin="2"/>
 
                                 <!-- 17 -->
-                                <TextBlock Grid.Row="17" Grid.Column="0" Text="Modules Broken" Margin="2"/>
-                                <TextBlock x:Name="modulesBrokenMinTB" Grid.Row="17" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="modulesBrokenMaxTB" Grid.Row="17" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="modulesBrokenAvgTB" Grid.Row="17" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="17" Grid.Column="0" Text="Bosses Killed" Margin="2"/>
+                                <TextBlock x:Name="bossesKilledMinTB" Grid.Row="17" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="bossesKilledMaxTB" Grid.Row="17" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="bossesKilledAvgTB" Grid.Row="17" Grid.Column="3" Margin="2"/>
 
                                 <!-- 18 -->
-                                <TextBlock Grid.Row="18" Grid.Column="0" Text="Run Duration" Margin="2"/>
-                                <TextBlock x:Name="runDurationMinTB" Grid.Row="18" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="runDurationMaxTB" Grid.Row="18" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="runDurationAvgTB" Grid.Row="18" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="18" Grid.Column="0" Text="Final Hull" Margin="2"/>
+                                <TextBlock x:Name="finalHullMinTB" Grid.Row="18" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="finalHullMaxTB" Grid.Row="18" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="finalHullAvgTB" Grid.Row="18" Grid.Column="3" Margin="2"/>
 
                                 <!-- 19 -->
-                                <TextBlock Grid.Row="19" Grid.Column="0" Text="Total Runs" Margin="2"/>
-                                <TextBlock x:Name="totalRunsMinTB" Grid.Row="19" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="totalRunsMaxTB" Grid.Row="19" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="totalRunsAvgTB" Grid.Row="19" Grid.Column="3" Margin="2"/>
-
+                                <TextBlock Grid.Row="19" Grid.Column="0" Text="Regular Damage Taken" Margin="2"/>
+                                <TextBlock x:Name="regularDamageTakenMinTB" Grid.Row="19" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="regularDamageTakenMaxTB" Grid.Row="19" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="regularDamageTakenAvgTB" Grid.Row="19" Grid.Column="3" Margin="2"/>
                                 <!-- 20 -->
-                                <TextBlock Grid.Row="20" Grid.Column="0" Text="Total Runs Beaten" Margin="2"/>
-                                <TextBlock x:Name="totalRunsBeatenMinTB" Grid.Row="20" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="totalRunsBeatenMaxTB" Grid.Row="20" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="totalRunsBeatenAvgTB" Grid.Row="20" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="20" Grid.Column="0" Text="Hull Damage Taken" Margin="2"/>
+                                <TextBlock x:Name="hullDamageTakenMinTB" Grid.Row="20" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="hullDamageTakenMaxTB" Grid.Row="20" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="hullDamageTakenAvgTB" Grid.Row="20" Grid.Column="3" Margin="2"/>
 
                                 <!-- 21 -->
-                                <TextBlock Grid.Row="21" Grid.Column="0" Text="Current Cores" Margin="2"/>
-                                <TextBlock x:Name="currentCoresMinTB" Grid.Row="21" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="currentCoresMaxTB" Grid.Row="21" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="currentCoresAvgTB" Grid.Row="21" Grid.Column="3" Margin="2"/>
+                                <TextBlock Grid.Row="21" Grid.Column="0" Text="Damage Repaired" Margin="2"/>
+                                <TextBlock x:Name="damageRepairedMinTB" Grid.Row="21" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="damageRepairedMaxTB" Grid.Row="21" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="damageRepairedAvgTB" Grid.Row="21" Grid.Column="3" Margin="2"/>
+
+                                <!-- 22 -->
+                                <TextBlock Grid.Row="22" Grid.Column="0" Text="Modules Broken" Margin="2"/>
+                                <TextBlock x:Name="modulesBrokenMinTB" Grid.Row="22" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="modulesBrokenMaxTB" Grid.Row="22" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="modulesBrokenAvgTB" Grid.Row="22" Grid.Column="3" Margin="2"/>
+
+                                <!-- 23 -->
+                                <TextBlock Grid.Row="23" Grid.Column="0" Text="Run Duration" Margin="2"/>
+                                <TextBlock x:Name="runDurationMinTB" Grid.Row="23" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="runDurationMaxTB" Grid.Row="23" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="runDurationAvgTB" Grid.Row="23" Grid.Column="3" Margin="2"/>
+
+                                <!-- 24 -->
+                                <TextBlock Grid.Row="24" Grid.Column="0" Text="Total Runs" Margin="2"/>
+                                <TextBlock x:Name="totalRunsMinTB" Grid.Row="24" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="totalRunsMaxTB" Grid.Row="24" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="totalRunsAvgTB" Grid.Row="24" Grid.Column="3" Margin="2"/>
+
+                                <!-- 25 -->
+                                <TextBlock Grid.Row="25" Grid.Column="0" Text="Total Runs Beaten" Margin="2"/>
+                                <TextBlock x:Name="totalRunsBeatenMinTB" Grid.Row="25" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="totalRunsBeatenMaxTB" Grid.Row="25" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="totalRunsBeatenAvgTB" Grid.Row="25" Grid.Column="3" Margin="2"/>
+
+                                <!-- 26 -->
+                                <TextBlock Grid.Row="26" Grid.Column="0" Text="Current Cores" Margin="2"/>
+                                <TextBlock x:Name="currentCoresMinTB" Grid.Row="26" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="currentCoresMaxTB" Grid.Row="26" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="currentCoresAvgTB" Grid.Row="26" Grid.Column="3" Margin="2"/>
 
                             </Grid>
                         </ScrollViewer>
@@ -237,10 +270,10 @@
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*"/>
-                                <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
@@ -276,57 +309,27 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <ListView x:Name="AggrLocations" Grid.Row="1" Grid.Column="1">
+                                <ListView x:Name="AggrDamageByEnemy" Grid.Row="1" Grid.Column="1">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Location Name" Width="150" DisplayMemberBinding="{Binding Key}" />
-                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
-                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
+                                            <GridViewColumn Header="Enemy Name" Width="150" DisplayMemberBinding="{Binding Key}" />
+                                            <GridViewColumn Header="Total Damage" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
+                                            <GridViewColumn Header="Average Damage per Run" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <ListView x:Name="AggrRadarUpgrades" Grid.Row="2" Grid.Column="0">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Radar Upgrade Name" Width="150" DisplayMemberBinding="{Binding Key}" />
+                                            <GridViewColumn Header="Times Taken" Width="150" DisplayMemberBinding="{Binding Value.countString}" />
+                                            <GridViewColumn Header="Take %" Width="150" DisplayMemberBinding="{Binding Value.averageString}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
                             </Grid>
 
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <!-- Headers on the left -->
-                                    <ColumnDefinition Width="*"/>
-                                    <!-- Horizontal list -->
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Vertical headers -->
-                                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5">
-                                    <TextBlock Text="Enemy Name" FontWeight="Bold" FontSize="14" Margin="5 8 0 0"/>
-                                    <TextBlock Text="Total Damage" FontWeight="Bold" FontSize="14"  Margin="5 2 0 0"/>
-                                    <TextBlock Text="Average Damage" FontWeight="Bold" FontSize="14"  Margin="5 2 0 0"/>
-                                </StackPanel>
-
-                                <!-- ListView that shows items horizontally -->
-                                <ListView x:Name="AggrDamageByEnemy"
-                                          Grid.Column="1"
-                                          VerticalAlignment="Top"
-                                          Margin="0 10"
-                                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                          BorderThickness="0">
-                                    <ListView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Horizontal"/>
-                                        </ItemsPanelTemplate>
-                                    </ListView.ItemsPanel>
-
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical" Margin="0" Width="100" Background="#EEE">
-                                                <TextBlock Text="{Binding Key}" Margin="2"/>
-                                                <TextBlock Text="{Binding Value.countString}" Margin="2"/>
-                                                <TextBlock Text="{Binding Value.averageString}" Margin="2"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
+                            
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -338,14 +341,15 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Round Won" Width="Auto" DisplayMemberBinding="{Binding runWonString}" />
-                                    <GridViewColumn Header="Modules Taken" Width="Auto" DisplayMemberBinding="{Binding modulesTakenString}" />
-                                    <GridViewColumn Header="Upgrades Taken" Width="Auto" DisplayMemberBinding="{Binding upgradesTakenString}" />
-                                    <GridViewColumn Header="Relics Taken" Width="Auto" DisplayMemberBinding="{Binding relicsTakenString}" />
-                                    <GridViewColumn Header="Radar Upgrades" Width="Auto" DisplayMemberBinding="{Binding radarUpgradesString}" />
                                     <GridViewColumn Header="Locations Visited" Width="Auto" DisplayMemberBinding="{Binding locationsVisitedString}" />
                                     <GridViewColumn Header="Easy Locations" Width="Auto" DisplayMemberBinding="{Binding easyLocationsString}" />
                                     <GridViewColumn Header="Medium Locations" Width="Auto" DisplayMemberBinding="{Binding mediumLocationsString}" />
                                     <GridViewColumn Header="Hard Locations" Width="Auto" DisplayMemberBinding="{Binding hardLocationsString}" />
+                                    <GridViewColumn Header="Cannon Locations" Width="Auto" DisplayMemberBinding="{Binding cannonLocationsString}" />
+                                    <GridViewColumn Header="Module Locations" Width="Auto" DisplayMemberBinding="{Binding moduleLocationsString}" />
+                                    <GridViewColumn Header="Upgrade Locations" Width="Auto" DisplayMemberBinding="{Binding upgradeLocationsString}" />
+                                    <GridViewColumn Header="Relic Locations" Width="Auto" DisplayMemberBinding="{Binding relicLocationsString}" />
+                                    <GridViewColumn Header="Shop Locations" Width="Auto" DisplayMemberBinding="{Binding shopLocationsString}" />
                                     <GridViewColumn Header="Scrap Collected" Width="Auto" DisplayMemberBinding="{Binding scrapCollectedString}" />
                                     <GridViewColumn Header="Ammo Collected" Width="Auto" DisplayMemberBinding="{Binding ammoCollectedString}" />
                                     <GridViewColumn Header="Scrap Used (SU)" Width="Auto" DisplayMemberBinding="{Binding scrapUsedString}" />
@@ -359,12 +363,16 @@
                                     <GridViewColumn Header="Damage Taken Regular" Width="Auto" DisplayMemberBinding="{Binding regularDamageTakenString}" />
                                     <GridViewColumn Header="Damage Taken Hull" Width="Auto" DisplayMemberBinding="{Binding hullDamageTakenString}" />
                                     <GridViewColumn Header="Damage Repaired" Width="Auto" DisplayMemberBinding="{Binding damageRepairedString}" />
-                                    <GridViewColumn Header="Damage by Enemy" Width="Auto" DisplayMemberBinding="{Binding damageByEnemyString}" />
                                     <GridViewColumn Header="Modules Broken" Width="Auto" DisplayMemberBinding="{Binding modulesBrokenString}" />
                                     <GridViewColumn Header="Run Duration" Width="Auto" DisplayMemberBinding="{Binding runDurationString}" />
                                     <GridViewColumn Header="Total Runs" Width="Auto" DisplayMemberBinding="{Binding totalRunsString}" />
                                     <GridViewColumn Header="Total Runs Beaten" Width="Auto" DisplayMemberBinding="{Binding totalRunsBeatenString}" />
                                     <GridViewColumn Header="Current Core #" Width="Auto" DisplayMemberBinding="{Binding currentCoreCountString}" />
+                                    <GridViewColumn Header="Modules Taken" Width="Auto" DisplayMemberBinding="{Binding modulesTakenString}" />
+                                    <GridViewColumn Header="Upgrades Taken" Width="Auto" DisplayMemberBinding="{Binding upgradesTakenString}" />
+                                    <GridViewColumn Header="Relics Taken" Width="Auto" DisplayMemberBinding="{Binding relicsTakenString}" />
+                                    <GridViewColumn Header="Radar Upgrades" Width="Auto" DisplayMemberBinding="{Binding radarUpgradesString}" />
+                                    <GridViewColumn Header="Damage by Enemy" Width="Auto" DisplayMemberBinding="{Binding damageByEnemyString}" />
                                 </GridView>
                             </ListView.View>
                         </ListView>

@@ -23,6 +23,17 @@ public class RunData
     public int hardLocations;
     public string hardLocationsString => hardLocations.ToString();
     public int scrapCollected;
+
+    public int cannonLocations;
+    public string cannonLocationsString => cannonLocations.ToString();
+    public int moduleLocations;
+    public string moduleLocationsString => moduleLocations.ToString();
+    public int upgradeLocations;
+    public string upgradeLocationsString => upgradeLocations.ToString();
+    public int relicLocations;
+    public string relicLocationsString => relicLocations.ToString();
+    public int shopLocations;
+    public string shopLocationsString => shopLocations.ToString();
     public string scrapCollectedString => scrapCollected.ToString();
     public int ammoCollected;
     public string ammoCollectedString => ammoCollected.ToString();

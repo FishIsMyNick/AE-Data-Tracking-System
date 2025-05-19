@@ -23,7 +23,7 @@ namespace AE_DataTracker;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window, INotifyPropertyChanged
+public partial class MainWindow : Window
 {
     public AgregatedData agregatedData;
     public DateTime firstEntry;
@@ -40,52 +40,6 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private const string appPassword = "ydbi vrdr lkul yggq";
     private const string csvDumpDirectory = @"C:\CSV_Dump\";
     private const string saveDirectory = @"C:\AggregatedData\";
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    public void CollectCsvAttachments()
-    {
-        using (var client = new ImapClient())
-        {
-            client.Connect("imap.gmail.com", 993, true);
-            client.Authenticate(email, appPassword);
-
-            var inbox = client.Inbox;
-            inbox.Open(FolderAccess.ReadWrite);
-
-            var query = SearchQuery.DeliveredAfter(StartDatePicker.SelectedDate == null ? new DateTime(2025, 1, 1) : (DateTime)StartDatePicker.SelectedDate)
-                .And(SearchQuery.DeliveredBefore(EndDatePicker.SelectedDate == null ? DateTime.Now : (DateTime)EndDatePicker.SelectedDate.Value.AddDays(1)))
-                .And(SearchQuery.SubjectContains("RunData"));
-
-            firstEntry = new DateTime(2025, 1, 1);
-            lastEntry = DateTime.Now;
-
-            foreach (var uid in inbox.Search(query))
-            {
-                var message = inbox.GetMessage(uid);
-
-                foreach (var attachment in message.Attachments)
-                {
-                    if (attachment is MimePart part && part.FileName.EndsWith(".csv"))
-                    {
-                        if (message.Date < firstEntry)
-                            firstEntry = message.Date.DateTime;
-                        if (message.Date > lastEntry)
-                            lastEntry = message.Date.DateTime;
-
-                        var filePath = System.IO.Path.Combine(csvDumpDirectory, part.FileName);
-                        using (var stream = File.Create(filePath))
-                        {
-                            part.Content.DecodeTo(stream);
-                        }
-                        Console.WriteLine($"Saved CSV: {filePath}");
-                    }
-                }
-            }
-
-            client.Disconnect(true);
-        }
-    }
 
     private void LoadData_Click(object sender, RoutedEventArgs e)
     {
@@ -106,7 +60,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
         // Agregated data
         agregatedData = new AgregatedData();
-        if(AllRB.IsChecked == true)
+        if (AllRB.IsChecked == true)
         {
             agregatedData.InitializeData(RunData);
             AllDataListView.ItemsSource = RunData;
@@ -142,6 +96,287 @@ public partial class MainWindow : Window, INotifyPropertyChanged
             RunData.Add(GetRunDataFromCsv(csv));
     }
 
+    public void CollectCsvAttachments()
+    {
+        using (var client = new ImapClient())
+        {
+            client.Connect("imap.gmail.com", 993, true);
+            client.Authenticate(email, appPassword);
+
+            var inbox = client.Inbox;
+            inbox.Open(FolderAccess.ReadWrite);
+
+            var query =
+                        SearchQuery.DeliveredAfter(StartDatePicker.SelectedDate == null ? new DateTime(2025, 5, 17) : (DateTime)StartDatePicker.SelectedDate)
+                    .And(
+                        SearchQuery.DeliveredBefore(EndDatePicker.SelectedDate == null ? DateTime.Now.AddDays(1) : (DateTime)EndDatePicker.SelectedDate.Value.AddDays(1)))
+                    .And(
+                        SearchQuery.SubjectContains("RunData"));
+
+            firstEntry = new DateTime(2025, 1, 1);
+            lastEntry = DateTime.Now;
+
+            foreach (var uid in inbox.Search(query))
+            {
+                var message = inbox.GetMessage(uid);
+
+                foreach (var attachment in message.Attachments)
+                {
+                    if (attachment is MimePart part && part.FileName.EndsWith(".csv"))
+                    {
+                        if (message.Date < firstEntry)
+                            firstEntry = message.Date.DateTime;
+                        if (message.Date > lastEntry)
+                            lastEntry = message.Date.DateTime;
+
+                        var filePath = System.IO.Path.Combine(csvDumpDirectory, $"RunData_{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}_{DateTime.Now.Hour}-{DateTime.Now.Minute}-{DateTime.Now.Second}.csv");
+                        using (var stream = File.Create(filePath))
+                        {
+                            part.Content.DecodeTo(stream);
+                        }
+                        Console.WriteLine($"Saved CSV: {filePath}");
+                    }
+                }
+            }
+
+            client.Disconnect(true);
+        }
+    }
+
+
+
+    private void SaveData_Click(object sender, RoutedEventArgs e)
+    {
+        StatusLabel.Content = "Saving...";
+
+        string fileName = $"RunData_Report_{firstEntry.ToString("yyyyMMdd_HHmmss")}-{lastEntry.ToString("yyyyMMdd_HHmmss")}.csv";
+        string filePath = System.IO.Path.Combine(saveDirectory, fileName);
+
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine($"Run Data Report; From: {agregatedData.firstEntry.Date.ToString("yyyy.MM.dd.")}; To: {agregatedData.lastEntry.Date.ToString("yyyy.MM.dd.")}");
+            writer.WriteLine();
+            writer.WriteLine($"Metric; Min; Max; Avg;", FontStyles.Oblique);
+            writer.WriteLine();
+            writer.WriteLine($"Win rate;{agregatedData.runsWon}; {agregatedData.runsLost}; {agregatedData.winRate}%");
+            writer.WriteLine();
+            writer.WriteLine($"Easy locations;min={agregatedData.easyLocationsMinimum}; max={agregatedData.easyLocationsMaximum}; avg={agregatedData.easyLocationsAverage}");
+            writer.WriteLine($"Medium locations;min={agregatedData.mediumLocationsMinimum}; max={agregatedData.mediumLocationsMaximum}; avg={agregatedData.mediumLocationsAverage}");
+            writer.WriteLine($"Hard locations;min={agregatedData.hardLocationsMinimum}; max={agregatedData.hardLocationsMaximum}; avg={agregatedData.hardLocationsAverage}");
+            writer.WriteLine();
+            writer.WriteLine($"Scrap collected;min={agregatedData.scrapCollectedMinimum}; max={agregatedData.scrapCollectedMaximum}; avg={agregatedData.scrapCollectedAverage}");
+            writer.WriteLine($"Ammo collected;min={agregatedData.ammoCollectedMinimum}; max={agregatedData.ammoCollectedMaximum}; avg={agregatedData.ammoCollectedAverage}");
+            writer.WriteLine();
+            writer.WriteLine($"Scrap used on wagons;min={agregatedData.scrapUsedWagonsMinimum}; max={agregatedData.scrapUsedWagonsMaximum}; avg={agregatedData.scrapUsedWagonsAverage}");
+            writer.WriteLine($"Scrap used on ammo;min={agregatedData.scrapUsedAmmoMinimum}; max={agregatedData.scrapUsedAmmoMaximum}; avg={agregatedData.scrapUsedAmmoAverage}");
+            writer.WriteLine($"Scrap used on repairs;min={agregatedData.scrapUsedRepairMinimum}; max={agregatedData.scrapUsedRepairMaximum}; avg={agregatedData.scrapUsedRepairAverage}");
+            writer.WriteLine($"Scrap used on upgrades;min={agregatedData.scrapUsedUpgradesMinimum}; max={agregatedData.scrapUsedUpgradesMaximum}; avg={agregatedData.scrapUsedUpgradesAverage}");
+            writer.WriteLine($"Ammo used;min={agregatedData.ammoUsedMinimum}; max={agregatedData.ammoUsedMaximum}; avg={agregatedData.ammoUsedAverage}");
+            writer.WriteLine();
+            writer.WriteLine($"Bosses killed;min={agregatedData.bossesKilledMinimum}; max={agregatedData.bossesKilledMaximum}; avg={agregatedData.bossesKilledAverage}");
+            writer.WriteLine();
+            writer.WriteLine($"Final hull;min={agregatedData.finalHullMinimum}; max={agregatedData.finalHullMaximum}; avg={agregatedData.finalHullAverage}");
+            writer.WriteLine($"Regular damage taken;min={agregatedData.regularDamageTakenMinimum}; max={agregatedData.regularDamageTakenMaximum}; avg={agregatedData.regularDamageTakenAverage}");
+            writer.WriteLine($"Hull damage taken;min={agregatedData.hullDamageTakenMinimum}; max={agregatedData.hullDamageTakenMaximum}; avg={agregatedData.hullDamageTakenAverage}");
+            writer.WriteLine($"Damage repaired;min={agregatedData.damageRepairedMinimum}; max={agregatedData.damageRepairedMaximum}; avg={agregatedData.damageRepairedAverage}");
+            writer.WriteLine();
+            writer.WriteLine($"Modules broken;min={agregatedData.modulesBrokenMinimum}; max={agregatedData.modulesBrokenMaximum}; avg={agregatedData.modulesBrokenAverage}");
+            writer.WriteLine();
+            writer.WriteLine($"Run duration;min={agregatedData.runDurationMinimum}; max={agregatedData.runDurationMaximum}; avg={agregatedData.runDurationAverage}");
+
+            writer.WriteLine($"Total runs;min={agregatedData.totalRunsMinimum}; max={agregatedData.totalRunsMaximum}; avg={agregatedData.totalRunsAverage}");
+            writer.WriteLine($"Total runs beaten;min={agregatedData.totalRunsBeatenMinimum}; max={agregatedData.totalRunsBeatenMaximum}; avg={agregatedData.totalRunsBeatenAverage}");
+            writer.WriteLine();
+            writer.WriteLine($"Current cores;min={agregatedData.currentCoresMinimum}; max={agregatedData.currentCoresMaximum}; avg={agregatedData.currentCoresAverage}");
+
+            // Modules Table
+            writer.WriteLine();
+            writer.WriteLine("Modules Taken;");
+            writer.WriteLine("Module Name;Times Taken;% Taken");
+            foreach (var entry in agregatedData.modulesAggr)
+            {
+                writer.WriteLine($"{entry.Key};{entry.Value.count};{entry.Value.average:0.##}%");
+            }
+
+            // Upgrades Table
+            writer.WriteLine();
+            writer.WriteLine("Upgrades Taken;");
+            writer.WriteLine("Upgrade Name;Times Taken;% Taken");
+            foreach (var entry in agregatedData.upgradesAggr)
+            {
+                writer.WriteLine($"{entry.Key};{entry.Value.count};{entry.Value.average:0.##}%");
+            }
+
+            // Relics Table
+            writer.WriteLine();
+            writer.WriteLine("Relics Taken;");
+            writer.WriteLine("Relic Name;Times Taken;% Taken");
+            foreach (var entry in agregatedData.relicsAggr)
+            {
+                writer.WriteLine($"{entry.Key};{entry.Value.count};{entry.Value.average:0.##}%");
+            }
+
+            // Locations Table
+            writer.WriteLine();
+            writer.WriteLine("Locations Visited;");
+            writer.WriteLine("Location Name;Times Taken;% Taken");
+            foreach (var entry in agregatedData.locationsAggr)
+            {
+                writer.WriteLine($"{entry.Key};{entry.Value.count};{entry.Value.average:0.##}%");
+            }
+
+        }
+
+        StatusLabel.Content = "";
+    }
+
+    private void ClearData_Click(object sender, RoutedEventArgs e)
+    {
+        if (Directory.Exists(csvDumpDirectory))
+        {
+            foreach (string file in Directory.GetFiles(csvDumpDirectory))
+            {
+                File.Delete(file);
+            }
+        }
+
+        agregatedData = null;
+        UpdateAggregatedData(new AgregatedData());
+        AllDataListView.ItemsSource = new List<RunData>();
+    }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+
+    private RunData GetRunDataFromCsv(string csv)
+    {
+        string[] kvs = csv.Split('\n');
+        string[] keys = kvs[0].Trim('\r').Split(',');
+        string[] values = kvs[1].Trim('\r').Split(',');
+        Dictionary<string, string> kvps = new Dictionary<string, string>();
+        for (int i = 0; i < keys.Length; i++)
+        {
+            kvps.Add(keys[i], values[i]);
+        }
+        string dataLine = csv.Split('\n')[1];
+
+        string[] data = dataLine.Split(',');
+
+        RunData runData = new RunData()
+        {
+            runWon = kvps["RunWon"] == "True" ? true : false,
+            modulesTaken = new List<string>(),
+            upgradesTaken = new List<string>(),
+            relicsTaken = new List<string>(),
+            radarUpgrades = new List<string>(),
+            visitedLocations = new List<string>(),
+            easyLocations = int.Parse(kvps["EasyLocations"]),
+            mediumLocations = int.Parse(kvps["NormalLocations"]),
+            hardLocations = int.Parse(kvps["HardLocations"]),
+            cannonLocations = int.Parse(kvps["CannonLocations"]),
+            moduleLocations = int.Parse(kvps["ModuleLocations"]),
+            upgradeLocations = int.Parse(kvps["UpgradeLocations"]),
+            relicLocations = int.Parse(kvps["RelicLocations"]),
+            shopLocations = int.Parse(kvps["ShopLocations"]),
+            scrapCollected = int.Parse(kvps["ScrapCollected"]),
+            scrapUsed = int.Parse(kvps["ScrapUsed"]),
+            scrapUsedWagons = int.Parse(kvps["ScrapUsedWagons"]),
+            scrapUsedAmmo = int.Parse(kvps["ScrapUsedAmmo"]),
+            scrapUsedRepair = int.Parse(kvps["ScrapUsedRepair"]),
+            scrapUsedUpgrades = int.Parse(kvps["ScrapUsedUpgrades"]),
+            ammoCollected = int.Parse(kvps["AmmoCollected"]),
+            ammoUsed = int.Parse(kvps["AmmoUsed"]),
+            bossesKilled = int.Parse(kvps["BossesKilled"]),
+            finalHull = float.Parse(kvps["FinalHull"]),
+            regularDamageTaken = float.Parse(kvps["TotalDamageTaken"]),
+            hullDamageTaken = float.Parse(kvps["HullDamageTaken"]),
+            damageRepaired = float.Parse(kvps["DamageRepaired"]),
+            modulesBroken = int.Parse(kvps["ModulesBroken"]),
+            runDuration = float.Parse(kvps["RunDuration"]),
+            totalRuns = int.Parse(kvps["TotalRuns"]),
+            totalRunsBeaten = int.Parse(kvps["TotalRunsBeaten"]),
+            currentCoreCount = int.Parse(kvps["CurrentCoreCount"]),
+            damageByEnemy = new Dictionary<string, float>()
+        };
+
+        foreach (string module in kvps["Modules"].Split('|'))
+            if (module != "")
+                runData.modulesTaken.Add(module);
+
+        foreach (string upgrade in kvps["Upgrades"].Split('|'))
+            if (upgrade != "")
+                runData.upgradesTaken.Add(upgrade);
+
+        foreach (string relic in kvps["Relics"].Split('|'))
+            if (relic != "")
+                runData.relicsTaken.Add(relic);
+
+        foreach (string radar in kvps["RadarUpgrades"].Split('|'))
+            if (radar != "")
+            runData.radarUpgrades.Add(radar);
+
+        foreach (string damage in kvps["DamageByEnemy"].Split('|'))
+        {
+            string[] kvp = damage.Split(":");
+            if (kvp.Length != 2)
+                continue;
+            runData.damageByEnemy.Add(kvp[0], float.Parse(kvp[1]));
+        }
+
+        return runData;
+    }
+
+    private string[] LoadAllFilesFromDirectory()
+    {
+        if (!Directory.Exists(csvDumpDirectory))
+            throw new DirectoryNotFoundException($"Directory not found: {csvDumpDirectory}");
+
+        string[] files = Directory.GetFiles(csvDumpDirectory);
+        string[] allContents = new string[files.Length];
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            string content = File.ReadAllText(files[i]);
+            allContents[i] = content;
+        }
+
+        return allContents;
+    }
+
+    #region Radio Buttons
+    private void AllRB_Click(object sender, RoutedEventArgs e)
+    {
+        if (RunData == null || RunData.Count == 0)
+            return;
+        agregatedData.InitializeData(RunData);
+        UpdateAggregatedData(agregatedData);
+
+        AllDataListView.ItemsSource = RunData;
+    }
+
+    private void WinRB_Click(object sender, RoutedEventArgs e)
+    {
+        if (RunData == null || RunData.Count == 0)
+            return;
+        agregatedData.InitializeData(RunData.Where(r => r.runWon).ToList());
+        UpdateAggregatedData(agregatedData);
+
+        AllDataListView.ItemsSource = RunData.Where(r => r.runWon).ToList();
+    }
+
+    private void LossRB_Click(object sender, RoutedEventArgs e)
+    {
+        if (RunData == null || RunData.Count == 0)
+            return;
+        agregatedData.InitializeData(RunData.Where(r => !r.runWon).ToList());
+        UpdateAggregatedData(agregatedData);
+
+        AllDataListView.ItemsSource = RunData.Where(r => !r.runWon).ToList();
+    }
+    #endregion
+
     private void UpdateAggregatedData(AgregatedData data)
     {
         UpdateBasicAgregatedData(data);
@@ -169,6 +404,31 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         hardLocationsMinTB.Text = data.hardLocationsMinimum;
         hardLocationsMaxTB.Text = data.hardLocationsMaximum;
         hardLocationsAvgTB.Text = data.hardLocationsAverage;
+
+        // Cannon Locations
+        cannonLocationsMinTB.Text = data.cannonLocationsMinimum;
+        cannonLocationsMaxTB.Text = data.cannonLocationsMaximum;
+        cannonLocationsAvgTB.Text = data.cannonLocationsAverage;
+
+        // Module Locations
+        moduleLocationsMinTB.Text = data.moduleLocationsMinimum;
+        moduleLocationsMaxTB.Text = data.moduleLocationsMaximum;
+        moduleLocationsAvgTB.Text = data.moduleLocationsAverage;
+
+        // Upgrade Locations
+        upgradeLocationsMinTB.Text = data.upgradeLocationsMinimum;
+        upgradeLocationsMaxTB.Text = data.upgradeLocationsMaximum;
+        upgradeLocationsAvgTB.Text = data.upgradeLocationsAverage;
+
+        // Relic Locations
+        relicLocationsMinTB.Text = data.relicLocationsMinimum;
+        relicLocationsMaxTB.Text = data.relicLocationsMaximum;
+        relicLocationsAvgTB.Text = data.relicLocationsAverage;
+
+        // Shop Locations
+        shopLocationsMinTB.Text = data.shopLocationsMinimum;
+        shopLocationsMaxTB.Text = data.shopLocationsMaximum;
+        shopLocationsAvgTB.Text = data.shopLocationsAverage;
 
         // Scrap Collected
         scrapCollectedMinTB.Text = data.scrapCollectedMinimum;
@@ -261,191 +521,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         AggrModules.ItemsSource = data.modulesAggr;
         AggrUpgrades.ItemsSource = data.upgradesAggr;
         AggrRelics.ItemsSource = data.relicsAggr;
-        AggrLocations.ItemsSource = data.locationsAggr;
+        AggrRadarUpgrades.ItemsSource = data.radarAggr;
         AggrDamageByEnemy.ItemsSource = data.damageByEnemyAggr;
-    }
-
-    private void SaveData_Click(object sender, RoutedEventArgs e)
-    {
-        StatusLabel.Content = "Saving...";
-
-        string fileName = $"RunData_Report_{firstEntry.ToString("yyyyMMdd_HHmmss")}-{lastEntry.ToString("yyyyMMdd_HHmmss")}.csv";
-        string filePath = System.IO.Path.Combine(saveDirectory, fileName);
-
-        using (StreamWriter writer = new StreamWriter(filePath))
-        {
-            writer.WriteLine($"Run Data Report; From: {agregatedData.firstEntry.Date.ToString("yyyy.MM.dd.")}; To: {agregatedData.lastEntry.Date.ToString("yyyy.MM.dd.")}");
-            writer.WriteLine();
-            writer.WriteLine($"Metric; Min; Max; Avg;", FontStyles.Oblique);
-            writer.WriteLine();
-            writer.WriteLine($"Win rate;{agregatedData.runsWon}; {agregatedData.runsLost}; {agregatedData.winRate}%");
-            writer.WriteLine();
-            writer.WriteLine($"Easy locations;min={agregatedData.easyLocationsMinimum}; max={agregatedData.easyLocationsMaximum}; avg={agregatedData.easyLocationsAverage}");
-            writer.WriteLine($"Medium locations;min={agregatedData.mediumLocationsMinimum}; max={agregatedData.mediumLocationsMaximum}; avg={agregatedData.mediumLocationsAverage}");
-            writer.WriteLine($"Hard locations;min={agregatedData.hardLocationsMinimum}; max={agregatedData.hardLocationsMaximum}; avg={agregatedData.hardLocationsAverage}");
-            writer.WriteLine();
-            writer.WriteLine($"Scrap collected;min={agregatedData.scrapCollectedMinimum}; max={agregatedData.scrapCollectedMaximum}; avg={agregatedData.scrapCollectedAverage}");
-            writer.WriteLine($"Ammo collected;min={agregatedData.ammoCollectedMinimum}; max={agregatedData.ammoCollectedMaximum}; avg={agregatedData.ammoCollectedAverage}");
-            writer.WriteLine();
-            writer.WriteLine($"Scrap used on wagons;min={agregatedData.scrapUsedWagonsMinimum}; max={agregatedData.scrapUsedWagonsMaximum}; avg={agregatedData.scrapUsedWagonsAverage}");
-            writer.WriteLine($"Scrap used on ammo;min={agregatedData.scrapUsedAmmoMinimum}; max={agregatedData.scrapUsedAmmoMaximum}; avg={agregatedData.scrapUsedAmmoAverage}");
-            writer.WriteLine($"Scrap used on repairs;min={agregatedData.scrapUsedRepairMinimum}; max={agregatedData.scrapUsedRepairMaximum}; avg={agregatedData.scrapUsedRepairAverage}");
-            writer.WriteLine($"Scrap used on upgrades;min={agregatedData.scrapUsedUpgradesMinimum}; max={agregatedData.scrapUsedUpgradesMaximum}; avg={agregatedData.scrapUsedUpgradesAverage}");
-            writer.WriteLine($"Ammo used;min={agregatedData.ammoUsedMinimum}; max={agregatedData.ammoUsedMaximum}; avg={agregatedData.ammoUsedAverage}");
-            writer.WriteLine();
-            writer.WriteLine($"Bosses killed;min={agregatedData.bossesKilledMinimum}; max={agregatedData.bossesKilledMaximum}; avg={agregatedData.bossesKilledAverage}");
-                        writer.WriteLine();
-            writer.WriteLine($"Final hull;min={agregatedData.finalHullMinimum}; max={agregatedData.finalHullMaximum}; avg={agregatedData.finalHullAverage}");
-            writer.WriteLine($"Regular damage taken;min={agregatedData.regularDamageTakenMinimum}; max={agregatedData.regularDamageTakenMaximum}; avg={agregatedData.regularDamageTakenAverage}");
-            writer.WriteLine($"Hull damage taken;min={agregatedData.hullDamageTakenMinimum}; max={agregatedData.hullDamageTakenMaximum}; avg={agregatedData.hullDamageTakenAverage}");
-            writer.WriteLine($"Damage repaired;min={agregatedData.damageRepairedMinimum}; max={agregatedData.damageRepairedMaximum}; avg={agregatedData.damageRepairedAverage}");
-            writer.WriteLine();
-            writer.WriteLine($"Modules broken;min={agregatedData.modulesBrokenMinimum}; max={agregatedData.modulesBrokenMaximum}; avg={agregatedData.modulesBrokenAverage}");
-            writer.WriteLine();
-            writer.WriteLine($"Run duration;min={agregatedData.runDurationMinimum}; max={agregatedData.runDurationMaximum}; avg={agregatedData.runDurationAverage}");
-
-            writer.WriteLine($"Total runs;min={agregatedData.totalRunsMinimum}; max={agregatedData.totalRunsMaximum}; avg={agregatedData.totalRunsAverage}");
-            writer.WriteLine($"Total runs beaten;min={agregatedData.totalRunsBeatenMinimum}; max={agregatedData.totalRunsBeatenMaximum}; avg={agregatedData.totalRunsBeatenAverage}");
-            writer.WriteLine();
-            writer.WriteLine($"Current cores;min={agregatedData.currentCoresMinimum}; max={agregatedData.currentCoresMaximum}; avg={agregatedData.currentCoresAverage}");
-        }
-
-        StatusLabel.Content = "";
-    }
-    private void ClearData_Click(object sender, RoutedEventArgs e)
-    {
-        if (Directory.Exists(csvDumpDirectory))
-        {
-            foreach (string file in Directory.GetFiles(csvDumpDirectory))
-            {
-                File.Delete(file);
-            }
-        }
-
-        agregatedData = null;
-        UpdateAggregatedData(new AgregatedData());
-        AllDataListView.ItemsSource = new List<RunData>();
-    }
-
-    private void CloseButton_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
-    private RunData GetRunDataFromCsv(string csv)
-    {
-        string[] kvs = csv.Split('\n');
-        string[] keys = kvs[0].Trim('\r').Split(',');
-        string[] values = kvs[1].Trim('\r').Split(',');
-        Dictionary<string, string> kvps = new Dictionary<string, string>();
-        for (int i = 0; i < keys.Length; i++)
-        {
-            kvps.Add(keys[i], values[i]);
-        }
-        string dataLine = csv.Split('\n')[1];
-
-        string[] data = dataLine.Split(',');
-
-        RunData runData = new RunData()
-        {
-            runWon = kvps["RunWon"] == "True" ? true : false,
-            modulesTaken = new List<string>(),
-            upgradesTaken = new List<string>(),
-            relicsTaken = new List<string>(),
-            radarUpgrades = new List<string>(),
-            visitedLocations = new List<string>(),
-            easyLocations = int.Parse(kvps["EasyLocations"]),
-            mediumLocations = int.Parse(kvps["NormalLocations"]),
-            hardLocations = int.Parse(kvps["HardLocations"]),
-            scrapCollected = int.Parse(kvps["ScrapCollected"]),
-            scrapUsed = int.Parse(kvps["ScrapUsed"]),
-            scrapUsedWagons = int.Parse(kvps["ScrapUsedWagons"]),
-            scrapUsedAmmo = int.Parse(kvps["ScrapUsedAmmo"]),
-            scrapUsedRepair = int.Parse(kvps["ScrapUsedRepair"]),
-            scrapUsedUpgrades = int.Parse(kvps["ScrapUsedUpgrades"]),
-            ammoCollected = int.Parse(kvps["AmmoCollected"]),
-            ammoUsed = int.Parse(kvps["AmmoUsed"]),
-            bossesKilled = int.Parse(kvps["BossesKilled"]),
-            finalHull = float.Parse(kvps["FinalHull"]),
-            regularDamageTaken = float.Parse(kvps["TotalDamageTaken"]),
-            hullDamageTaken = float.Parse(kvps["HullDamageTaken"]),
-            damageRepaired = float.Parse(kvps["DamageRepaired"]),
-            modulesBroken = int.Parse(kvps["ModulesBroken"]),
-            runDuration = float.Parse(kvps["RunDuration"]),
-            totalRuns = int.Parse(kvps["TotalRuns"]),
-            totalRunsBeaten = int.Parse(kvps["TotalRunsBeaten"]),
-            currentCoreCount = int.Parse(kvps["CurrentCoreCount"]),
-            damageByEnemy = new Dictionary<string, float>()
-        };
-
-        foreach (string module in kvps["Modules"].Split('|'))
-            runData.modulesTaken.Add(module);
-
-        foreach (string upgrade in kvps["Upgrades"].Split('|'))
-            runData.upgradesTaken.Add(upgrade);
-
-        foreach (string relic in kvps["Relics"].Split('|'))
-            runData.relicsTaken.Add(relic);
-
-        foreach (string radar in kvps["RadarUpgrades"].Split('|'))
-            runData.radarUpgrades.Add(radar);
-
-        foreach (string location in kvps["VisitedLocations"].Split('|'))
-            runData.visitedLocations.Add(location);
-
-        foreach (string damage in kvps["DamageByEnemy"].Split('|'))
-        {
-            string[] kvp = damage.Split(":");
-            runData.damageByEnemy.Add(kvp[0], float.Parse(kvp[1]));
-        }
-
-        return runData;
-    }
-
-    private string[] LoadAllFilesFromDirectory()
-    {
-        if (!Directory.Exists(csvDumpDirectory))
-            throw new DirectoryNotFoundException($"Directory not found: {csvDumpDirectory}");
-
-        string[] files = Directory.GetFiles(csvDumpDirectory);
-        string[] allContents = new string[files.Length];
-
-        for (int i = 0; i < files.Length; i++)
-        {
-            string content = File.ReadAllText(files[i]);
-            allContents[i] = content;
-        }
-
-        return allContents;
-    }
-
-    private void AllRB_Click(object sender, RoutedEventArgs e)
-    {
-        if (RunData == null || RunData.Count == 0)
-            return;
-        agregatedData.InitializeData(RunData);
-        UpdateAggregatedData(agregatedData);
-
-        AllDataListView.ItemsSource = RunData;
-    }
-
-    private void WinRB_Click(object sender, RoutedEventArgs e)
-    {
-        if (RunData == null || RunData.Count == 0)
-            return;
-        agregatedData.InitializeData(RunData.Where(r => r.runWon).ToList());
-        UpdateAggregatedData(agregatedData);
-
-        AllDataListView.ItemsSource = RunData.Where(r => r.runWon).ToList();
-    }
-
-    private void LossRB_Click(object sender, RoutedEventArgs e)
-    {
-        if (RunData == null || RunData.Count == 0)
-            return;
-        agregatedData.InitializeData(RunData.Where(r => !r.runWon).ToList());
-        UpdateAggregatedData(agregatedData);
-
-        AllDataListView.ItemsSource = RunData.Where(r => !r.runWon).ToList();
     }
 }
