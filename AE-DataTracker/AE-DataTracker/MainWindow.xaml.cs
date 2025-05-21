@@ -290,6 +290,7 @@ public partial class MainWindow : Window
             upgradeLocations = int.Parse(kvps["UpgradeLocations"]),
             relicLocations = int.Parse(kvps["RelicLocations"]),
             shopLocations = int.Parse(kvps["ShopLocations"]),
+            levelAtEnd = int.Parse(kvps["LevelAtEnd"]),
             scrapCollected = int.Parse(kvps["ScrapCollected"]),
             scrapUsed = int.Parse(kvps["ScrapUsed"]),
             scrapUsedWagons = int.Parse(kvps["ScrapUsedWagons"]),
@@ -525,6 +526,11 @@ public partial class MainWindow : Window
         currentCoresMinTB.Text = data.currentCoresMinimum;
         currentCoresMaxTB.Text = data.currentCoresMaximum;
         currentCoresAvgTB.Text = data.currentCoresAverage;
+
+        // Level at End
+        levelAtEndMinTB.Text = data.levelAtEndMinimum;
+        levelAtEndMaxTB.Text = data.levelAtEndMaximum;
+        levelAtEndAvgTB.Text = data.levelAtEndAverage;
     }
 
     private void UpdateListData(AgregatedData data)

@@ -34,6 +34,8 @@ public class RunData
     public string relicLocationsString => relicLocations.ToString();
     public int shopLocations;
     public string shopLocationsString => shopLocations.ToString();
+    public int levelAtEnd;
+    public string levelAtEndString => levelAtEnd.ToString();
     public string scrapCollectedString => scrapCollected.ToString();
     public int ammoCollected;
     public string ammoCollectedString => ammoCollected.ToString();

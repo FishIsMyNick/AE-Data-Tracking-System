@@ -50,6 +50,10 @@ namespace AE_DataTracker
         public string shopLocationsMaximum;
         public string shopLocationsAverage;
 
+        public string levelAtEndMinimum;
+        public string levelAtEndMaximum;
+        public string levelAtEndAverage;
+
         public string scrapCollectedMinimum;
         public string scrapCollectedMaximum;
         public string scrapCollectedAverage;
@@ -183,6 +187,10 @@ namespace AE_DataTracker
             shopLocationsMinimum = runDataList.Min(r => r.shopLocations).ToString();
             shopLocationsMaximum = runDataList.Max(r => r.shopLocations).ToString();
             shopLocationsAverage = runDataList.Average(r => r.shopLocations).ToString("F2");
+
+            levelAtEndMinimum = runDataList.Min(r => r.levelAtEnd).ToString();
+            levelAtEndMaximum = runDataList.Max(r => r.levelAtEnd).ToString();
+            levelAtEndAverage = runDataList.Average(r => r.levelAtEnd).ToString("F2");
 
             scrapCollectedMinimum = runDataList.Min(r => r.scrapCollected).ToString();
             scrapCollectedMaximum = runDataList.Max(r => r.scrapCollected).ToString();
@@ -368,6 +376,30 @@ namespace AE_DataTracker
             hardLocationsMinimum = "0";
             hardLocationsMaximum = "0";
             hardLocationsAverage = "0";
+
+            cannonLocationsMaximum = "0";
+            cannonLocationsMinimum = "0";
+            cannonLocationsAverage = "0";
+
+            moduleLocationsMinimum = "0";
+            moduleLocationsMaximum = "0";
+            moduleLocationsAverage = "0";
+
+            upgradeLocationsMinimum = "0";
+            upgradeLocationsMaximum = "0";
+            upgradeLocationsAverage = "0";
+
+            relicLocationsMinimum = "0";
+            relicLocationsMaximum = "0";
+            relicLocationsAverage = "0";
+
+            shopLocationsMinimum = "0";
+            shopLocationsMaximum = "0";
+            shopLocationsAverage = "0";
+
+            levelAtEndMinimum = "0";
+            levelAtEndMaximum = "0";
+            levelAtEndAverage = "0";
 
             scrapCollectedMinimum = "0";
             scrapCollectedMaximum = "0";

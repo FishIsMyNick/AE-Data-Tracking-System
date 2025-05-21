@@ -265,6 +265,12 @@
                                 <TextBlock x:Name="currentCoresMaxTB" Grid.Row="26" Grid.Column="2" Margin="2"/>
                                 <TextBlock x:Name="currentCoresAvgTB" Grid.Row="26" Grid.Column="3" Margin="2"/>
 
+                                <!-- 27 -->
+                                <TextBlock Grid.Row="27" Grid.Column="0" Text="Level at End" Margin="2"/>
+                                <TextBlock x:Name="levelAtEndMinTB" Grid.Row="27" Grid.Column="1" Margin="2"/>
+                                <TextBlock x:Name="levelAtEndMaxTB" Grid.Row="27" Grid.Column="2" Margin="2"/>
+                                <TextBlock x:Name="levelAtEndAvgTB" Grid.Row="27" Grid.Column="3" Margin="2"/>
+
                             </Grid>
                         </ScrollViewer>
 
@@ -360,6 +366,7 @@
                                     <GridViewColumn Header="Upgrade Locations" Width="Auto" DisplayMemberBinding="{Binding upgradeLocationsString}" />
                                     <GridViewColumn Header="Relic Locations" Width="Auto" DisplayMemberBinding="{Binding relicLocationsString}" />
                                     <GridViewColumn Header="Shop Locations" Width="Auto" DisplayMemberBinding="{Binding shopLocationsString}" />
+                                    <GridViewColumn Header="Level at End" Width="Auto" DisplayMemberBinding="{Binding levelAtEndString}" />
                                     <GridViewColumn Header="Scrap Collected" Width="Auto" DisplayMemberBinding="{Binding scrapCollectedString}" />
                                     <GridViewColumn Header="Ammo Collected" Width="Auto" DisplayMemberBinding="{Binding ammoCollectedString}" />
                                     <GridViewColumn Header="Scrap Used (SU)" Width="Auto" DisplayMemberBinding="{Binding scrapUsedString}" />
