@@ -47,8 +47,8 @@ public partial class MainWindow : Window
         }
     }
 
-    private const string email = "luxlupus1997@gmail.com";
-    private const string appPassword = "ydbi vrdr lkul yggq";
+    private const string email = "llamawaredatatracking@yahoo.com";
+    private const string appPassword = "Ap0c4lyp53Expr355!";
     private const string csvDumpDirectory = @"C:\CSV_Dump\";
     private const string saveDirectory = @"C:\AggregatedData\";
 
@@ -111,7 +111,7 @@ public partial class MainWindow : Window
     {
         using (var client = new ImapClient())
         {
-            client.Connect("imap.gmail.com", 993, true);
+            client.Connect("imap.mail.yahoo.com", 993, true);
             client.Authenticate(email, appPassword);
 
             var inbox = client.Inbox;
