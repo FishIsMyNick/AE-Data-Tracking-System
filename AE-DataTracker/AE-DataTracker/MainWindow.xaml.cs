@@ -47,8 +47,8 @@ public partial class MainWindow : Window
         }
     }
 
-    private const string email = "llamawaredatatracking@yahoo.com";
-    private const string appPassword = "Ap0c4lyp53Expr355!";
+    private const string email = "llamawaredatatracking@gmail.com";
+    private const string appPassword = "pkhn xyru dpnt tsvx ";
     private const string csvDumpDirectory = @"C:\CSV_Dump\";
     private const string saveDirectory = @"C:\AggregatedData\";
 
