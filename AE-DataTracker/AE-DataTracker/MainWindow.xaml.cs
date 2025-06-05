@@ -60,35 +60,35 @@ public partial class MainWindow : Window
     {
         StatusLabel.Content = "Loading...";
 
-        //if (Directory.Exists(csvDumpDirectory))
-        //{
-        //    foreach (string file in Directory.GetFiles(csvDumpDirectory))
-        //    {
-        //        File.Delete(file);
-        //    }
-        //}
+            if (Directory.Exists(csvDumpDirectory))
+            {
+                foreach (string file in Directory.GetFiles(csvDumpDirectory))
+                {
+                    File.Delete(file);
+                }
+            }
 
-        GetDataFromEmail();
+             GetDataFromEmail();
 
+            // Agregated data
+            agregatedData = new AgregatedData();
+            agregatedData.InitializeData(RunData);
+            ProcessRadioButtonFilters();
+            agregatedData.firstEntry = firstEntry;
+            agregatedData.lastEntry = lastEntry;
+            UpdateAggregatedData(agregatedData);
+            // All data
+            UpdateAllDataTable();
 
-        // Agregated data
-        agregatedData = new AgregatedData();
-        agregatedData.InitializeData(RunData);
-        ProcessRadioButtonFilters();
-        agregatedData.firstEntry = firstEntry;
-        agregatedData.lastEntry = lastEntry;
-        UpdateAggregatedData(agregatedData);
-        // All data
-        UpdateAllDataTable();
+            RunsProcessedLabel.Content = $"Runs processed: {agregatedData.runDataList.Count}";
 
-        RunsProcessedLabel.Content = $"Runs processed: {agregatedData.runDataList.Count}";
-
-        StatusLabel.Content = "";
+            StatusLabel.Content = "";
     }
+
 
     private void GetDataFromEmail()
     {
-        //CollectCsvAttachments();
+        CollectCsvAttachments();
 
         string[] csvs = LoadAllFilesFromDirectory();
 
@@ -118,7 +118,8 @@ public partial class MainWindow : Window
             firstEntry = new DateTime(2025, 1, 1);
             lastEntry = DateTime.Now;
 
-            foreach (var uid in inbox.Search(query))
+            var queriedInbox = inbox.Search(query);
+            foreach (var uid in queriedInbox)
             {
                 var message = inbox.GetMessage(uid);
 
@@ -136,12 +137,12 @@ public partial class MainWindow : Window
                         {
                             part.Content.DecodeTo(stream);
                         }
-                        Console.WriteLine($"Saved CSV: {filePath}");
                     }
                 }
             }
 
             client.Disconnect(true);
+            return;
         }
     }
 
