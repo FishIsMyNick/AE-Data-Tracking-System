@@ -1,9 +1,11 @@
-﻿using Org.BouncyCastle.Bcpg;
+﻿using Org.BouncyCastle.Asn1.X509.Qualified;
+using Org.BouncyCastle.Bcpg;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AE_DataTracker
@@ -17,6 +19,10 @@ namespace AE_DataTracker
         public string runsWon;
         public string runsLost;
         public string winRate;
+
+        public string runsQuit;
+        public string runsWonOrDied;
+        public string runsQuitRate;
 
         public string easyLocationsMinimum;
         public string easyLocationsMaximum;
@@ -143,13 +149,49 @@ namespace AE_DataTracker
             }
             else
             {
-                ProcessBasicData(runDataList);
+                ProcessBasicData();
                 ProcessListData(runDataList);
             }
         }
 
-        public void ProcessBasicData(List<RunData> runDataList)
+        public List<AggregatedPropertyStats> ProcessBasicData()
         {
+            int totalRuns = runDataList.Count;
+            List<AggregatedPropertyStats> basicDataProps = new List<AggregatedPropertyStats>();
+
+            foreach (var prop in typeof(RunData).GetProperties())
+            {
+                AggregatedPropertyStats aggrData = new AggregatedPropertyStats();
+                aggrData.PropertyName = GetPropertyNameReadable(prop.Name);
+                if (prop.GetType() == typeof(int))
+                {
+                    List<int> values = runDataList.Select(item => Convert.ToInt32(prop.GetValue(item))).ToList();
+                    aggrData.Min = values.Min().ToString();
+                    aggrData.Max = values.Max().ToString();
+                    aggrData.Average = values.Average().ToString();
+                }
+                else if (prop.GetType() == typeof(float))
+                {
+                    List<float> values = runDataList.Select(item => float.Parse(prop.GetValue(item).ToString())).ToList();
+                    aggrData.Min = values.Min().ToString();
+                    aggrData.Max = values.Max().ToString();
+                    aggrData.Average = values.Average().ToString();
+                }
+                else if (prop.GetType() == typeof(bool))
+                {
+                    List<bool> values = runDataList.Select(item => Convert.ToBoolean(prop.GetValue(item))).ToList();
+                    aggrData.Min = values.Min().ToString();
+                    aggrData.Max = values.Max().ToString();
+                    aggrData.Average = $"{(values.Where(v => v).Count() / totalRuns) * 100f}%";
+                }
+                else
+                    continue;
+
+                basicDataProps.Add(aggrData);
+            }
+
+            return basicDataProps;
+
             int rw = runDataList.Count(r => r.runWon);
             int rl = runDataList.Count - rw;
             runsWon = "Runs won: " + rw.ToString();
@@ -261,9 +303,34 @@ namespace AE_DataTracker
             currentCoresAverage = runDataList.Average(r => r.currentCoreCount).ToString("F2");
         }
 
+        private AggregatedPropertyStats GetProperyStatsFromStrings(string value, string min, string max, string avg)
+        {
+            return new AggregatedPropertyStats
+            {
+                PropertyName = GetPropertyNameReadable(value),
+                Min = min,
+                Max = max,
+                Average = avg
+            };
+        }
+
+        private string GetPropertyNameReadable(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return name;
+
+            // Insert space before each capital letter (except the first character)
+            var withSpaces = Regex.Replace(name, "(?<!^)([A-Z])", " $1");
+
+            // Capitalize first letter
+            return char.ToUpper(withSpaces[0]) + withSpaces.Substring(1);
+        }
+
         public void ProcessListData(List<RunData> runDataList)
         {
             float totalRuns = runDataList.Count;
+
+
 
             Dictionary<string, ifPair> modules = new Dictionary<string, ifPair>();
             Dictionary<string, ifPair> upgrades = new Dictionary<string, ifPair>();
@@ -307,9 +374,9 @@ namespace AE_DataTracker
                     locations[runLocation].count++;
                 }
 
-                foreach(var radar in radars)
+                foreach (var radar in radars)
                 {
-                    if(!radars.ContainsKey(radar.Key))
+                    if (!radars.ContainsKey(radar.Key))
                         radars.Add(radar.Key, new ifPair { count = 0, average = 0 });
 
                     radars[radar.Key].count++;
@@ -331,7 +398,7 @@ namespace AE_DataTracker
             {
                 location.average = location.count / totalRuns * 100;
             }
-            foreach(var radar in radars.Values)
+            foreach (var radar in radars.Values)
             {
                 radar.average = radar.count / totalRuns * 100;
             }
@@ -469,6 +536,7 @@ namespace AE_DataTracker
             currentCoresMaximum = "0";
             currentCoresAverage = "0";
         }
+
     }
 }
 
@@ -488,4 +556,12 @@ public class ffPair
 
     public string countString => count.ToString("F2");
     public string averageString => average.ToString("F2");
+}
+
+public class AggregatedPropertyStats
+{
+    public string PropertyName { get; set; }
+    public string Min { get; set; }
+    public string Max { get; set; }
+    public string Average { get; set; }
 }

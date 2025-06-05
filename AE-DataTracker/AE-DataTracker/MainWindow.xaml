@@ -38,9 +38,15 @@
                     Padding="0 -15 0 0"
                     Click="CloseButton_Click"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label VerticalContentAlignment="Center">Win condition</Label>
             <RadioButton GroupName="WinConditionFilterRBG" Name="AllRB" Margin="10" Content="All" Click="AllRB_Click" IsChecked="True"/>
             <RadioButton GroupName="WinConditionFilterRBG" Name="WinRB" Margin="10" Content="Win" Click="WinRB_Click" IsChecked="False"/>
             <RadioButton GroupName="WinConditionFilterRBG" Name="LossRB" Margin="10" Content="Loss" Click="LossRB_Click" IsChecked="False"/>
+            <Separator Width="20" Background="LightGray"></Separator>
+            <Label VerticalAlignment="Center">Quit game</Label>
+            <RadioButton GroupName="QuitFilterRBG" Name="AllQRB" Margin="10" Content="All" Click="AllQRB_Click" IsChecked="True"/>
+            <RadioButton GroupName="QuitFilterRBG" Name="QuitRB" Margin="10" Content="Quit" Click="QuitRB_Click" IsChecked="False"/>
+            <RadioButton GroupName="QuitFilterRBG" Name="DiedRB" Margin="10" Content="Died" Click="DiedRB_Click" IsChecked="False"/>
         </StackPanel>
         <Grid Grid.Row="2">
             <TabControl>
@@ -55,222 +61,15 @@
                         <Label Name="RunsProcessedLabel" Margin="5 0" FontSize="16">Runs processed:</Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto"
                                       Margin="0 10 0 0">
-                            <Grid Margin="20" ShowGridLines="True">
-                                <!-- Define columns -->
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <!-- Metric name -->
-                                    <ColumnDefinition Width="*"/>
-                                    <!-- Minimum -->
-                                    <ColumnDefinition Width="*"/>
-                                    <!-- Maximum -->
-                                    <ColumnDefinition Width="*"/>
-                                    <!-- Average / Percent -->
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Row definitions -->
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <!-- Header -->
-                                    <!-- Rows 1 to 33: one per data row -->
-                                </Grid.RowDefinitions>
-
-                                <!-- Header row -->
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Metric" FontWeight="Bold" />
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Minimum" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Maximum" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Grid.Row="0" Grid.Column="3" Text="Average" FontWeight="Bold" HorizontalAlignment="Center"/>
-
-                                <!-- Data rows -->
-                                <!-- 1 -->
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Win Rate" Margin="2"/>
-                                <TextBlock x:Name="runsLostTB" Grid.Row="1" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="runsWonTB" Grid.Row="1" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="winRateTB" Grid.Row="1" Grid.Column="3" Margin="2"/>
-
-                                <!-- 2 -->
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Easy Locations" Margin="2"/>
-                                <TextBlock x:Name="easyLocationsMinTB" Grid.Row="2" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="easyLocationsMaxTB" Grid.Row="2" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="easyLocationsAvgTB" Grid.Row="2" Grid.Column="3" Margin="2"/>
-
-                                <!-- 3 -->
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Medium Locations" Margin="2"/>
-                                <TextBlock x:Name="mediumLocationsMinTB" Grid.Row="3" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="mediumLocationsMaxTB" Grid.Row="3" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="mediumLocationsAvgTB" Grid.Row="3" Grid.Column="3" Margin="2"/>
-
-                                <!-- 4 -->
-                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Hard Locations" Margin="2"/>
-                                <TextBlock x:Name="hardLocationsMinTB" Grid.Row="4" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="hardLocationsMaxTB" Grid.Row="4" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="hardLocationsAvgTB" Grid.Row="4" Grid.Column="3" Margin="2"/>
-
-                                <!-- 5 -->
-                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Cannon Locations" Margin="2"/>
-                                <TextBlock x:Name="cannonLocationsMinTB" Grid.Row="5" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="cannonLocationsMaxTB" Grid.Row="5" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="cannonLocationsAvgTB" Grid.Row="5" Grid.Column="3" Margin="2"/>
-
-                                <!-- 6 -->
-                                <TextBlock Grid.Row="6" Grid.Column="0" Text="Module Locations" Margin="2"/>
-                                <TextBlock x:Name="moduleLocationsMinTB" Grid.Row="6" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="moduleLocationsMaxTB" Grid.Row="6" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="moduleLocationsAvgTB" Grid.Row="6" Grid.Column="3" Margin="2"/>
-
-                                <!-- 7 -->
-                                <TextBlock Grid.Row="7" Grid.Column="0" Text="Upgrade Locations" Margin="2"/>
-                                <TextBlock x:Name="upgradeLocationsMinTB" Grid.Row="7" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="upgradeLocationsMaxTB" Grid.Row="7" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="upgradeLocationsAvgTB" Grid.Row="7" Grid.Column="3" Margin="2"/>
-
-                                <!-- 8 -->
-                                <TextBlock Grid.Row="8" Grid.Column="0" Text="Relic Locations" Margin="2"/>
-                                <TextBlock x:Name="relicLocationsMinTB" Grid.Row="8" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="relicLocationsMaxTB" Grid.Row="8" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="relicLocationsAvgTB" Grid.Row="8" Grid.Column="3" Margin="2"/>
-
-                                <!-- 9 -->
-                                <TextBlock Grid.Row="9" Grid.Column="0" Text="Shop Locations" Margin="2"/>
-                                <TextBlock x:Name="shopLocationsMinTB" Grid.Row="9" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="shopLocationsMaxTB" Grid.Row="9" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="shopLocationsAvgTB" Grid.Row="9" Grid.Column="3" Margin="2"/>
-
-                                <!-- 10 -->
-                                <TextBlock Grid.Row="10" Grid.Column="0" Text="Scrap Collected" Margin="2"/>
-                                <TextBlock x:Name="scrapCollectedMinTB" Grid.Row="10" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapCollectedMaxTB" Grid.Row="10" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapCollectedAvgTB" Grid.Row="10" Grid.Column="3" Margin="2"/>
-
-                                <!-- 11 -->
-                                <TextBlock Grid.Row="11" Grid.Column="0" Text="Ammo Collected" Margin="2"/>
-                                <TextBlock x:Name="ammoCollectedMinTB" Grid.Row="11" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="ammoCollectedMaxTB" Grid.Row="11" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="ammoCollectedAvgTB" Grid.Row="11" Grid.Column="3" Margin="2"/>
-
-                                <!-- 12 -->
-                                <TextBlock Grid.Row="12" Grid.Column="0" Text="Scrap Used - Wagons" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedWagonsMinTB" Grid.Row="12" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedWagonsMaxTB" Grid.Row="12" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedWagonsAvgTB" Grid.Row="12" Grid.Column="3" Margin="2"/>
-
-                                <!-- 13 -->
-                                <TextBlock Grid.Row="13" Grid.Column="0" Text="Scrap Used - Ammo" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedAmmoMinTB" Grid.Row="13" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedAmmoMaxTB" Grid.Row="13" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedAmmoAvgTB" Grid.Row="13" Grid.Column="3" Margin="2"/>
-
-                                <!-- 14 -->
-                                <TextBlock Grid.Row="14" Grid.Column="0" Text="Scrap Used - Repair" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedRepairMinTB" Grid.Row="14" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedRepairMaxTB" Grid.Row="14" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedRepairAvgTB" Grid.Row="14" Grid.Column="3" Margin="2"/>
-
-                                <!-- 15 -->
-                                <TextBlock Grid.Row="15" Grid.Column="0" Text="Scrap Used - Upgrades" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedUpgradesMinTB" Grid.Row="15" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedUpgradesMaxTB" Grid.Row="15" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="scrapUsedUpgradesAvgTB" Grid.Row="15" Grid.Column="3" Margin="2"/>
-
-                                <!-- 16 -->
-                                <TextBlock Grid.Row="16" Grid.Column="0" Text="Ammo Used" Margin="2"/>
-                                <TextBlock x:Name="ammoUsedMinTB" Grid.Row="16" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="ammoUsedMaxTB" Grid.Row="16" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="ammoUsedAvgTB" Grid.Row="16" Grid.Column="3" Margin="2"/>
-
-                                <!-- 17 -->
-                                <TextBlock Grid.Row="17" Grid.Column="0" Text="Bosses Killed" Margin="2"/>
-                                <TextBlock x:Name="bossesKilledMinTB" Grid.Row="17" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="bossesKilledMaxTB" Grid.Row="17" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="bossesKilledAvgTB" Grid.Row="17" Grid.Column="3" Margin="2"/>
-
-                                <!-- 18 -->
-                                <TextBlock Grid.Row="18" Grid.Column="0" Text="Final Hull" Margin="2"/>
-                                <TextBlock x:Name="finalHullMinTB" Grid.Row="18" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="finalHullMaxTB" Grid.Row="18" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="finalHullAvgTB" Grid.Row="18" Grid.Column="3" Margin="2"/>
-
-                                <!-- 19 -->
-                                <TextBlock Grid.Row="19" Grid.Column="0" Text="Regular Damage Taken" Margin="2"/>
-                                <TextBlock x:Name="regularDamageTakenMinTB" Grid.Row="19" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="regularDamageTakenMaxTB" Grid.Row="19" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="regularDamageTakenAvgTB" Grid.Row="19" Grid.Column="3" Margin="2"/>
-                                <!-- 20 -->
-                                <TextBlock Grid.Row="20" Grid.Column="0" Text="Hull Damage Taken" Margin="2"/>
-                                <TextBlock x:Name="hullDamageTakenMinTB" Grid.Row="20" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="hullDamageTakenMaxTB" Grid.Row="20" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="hullDamageTakenAvgTB" Grid.Row="20" Grid.Column="3" Margin="2"/>
-
-                                <!-- 21 -->
-                                <TextBlock Grid.Row="21" Grid.Column="0" Text="Damage Repaired" Margin="2"/>
-                                <TextBlock x:Name="damageRepairedMinTB" Grid.Row="21" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="damageRepairedMaxTB" Grid.Row="21" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="damageRepairedAvgTB" Grid.Row="21" Grid.Column="3" Margin="2"/>
-
-                                <!-- 22 -->
-                                <TextBlock Grid.Row="22" Grid.Column="0" Text="Modules Broken" Margin="2"/>
-                                <TextBlock x:Name="modulesBrokenMinTB" Grid.Row="22" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="modulesBrokenMaxTB" Grid.Row="22" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="modulesBrokenAvgTB" Grid.Row="22" Grid.Column="3" Margin="2"/>
-
-                                <!-- 23 -->
-                                <TextBlock Grid.Row="23" Grid.Column="0" Text="Run Duration" Margin="2"/>
-                                <TextBlock x:Name="runDurationMinTB" Grid.Row="23" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="runDurationMaxTB" Grid.Row="23" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="runDurationAvgTB" Grid.Row="23" Grid.Column="3" Margin="2"/>
-
-                                <!-- 24 -->
-                                <TextBlock Grid.Row="24" Grid.Column="0" Text="Total Runs" Margin="2"/>
-                                <TextBlock x:Name="totalRunsMinTB" Grid.Row="24" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="totalRunsMaxTB" Grid.Row="24" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="totalRunsAvgTB" Grid.Row="24" Grid.Column="3" Margin="2"/>
-
-                                <!-- 25 -->
-                                <TextBlock Grid.Row="25" Grid.Column="0" Text="Total Runs Beaten" Margin="2"/>
-                                <TextBlock x:Name="totalRunsBeatenMinTB" Grid.Row="25" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="totalRunsBeatenMaxTB" Grid.Row="25" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="totalRunsBeatenAvgTB" Grid.Row="25" Grid.Column="3" Margin="2"/>
-
-                                <!-- 26 -->
-                                <TextBlock Grid.Row="26" Grid.Column="0" Text="Current Cores" Margin="2"/>
-                                <TextBlock x:Name="currentCoresMinTB" Grid.Row="26" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="currentCoresMaxTB" Grid.Row="26" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="currentCoresAvgTB" Grid.Row="26" Grid.Column="3" Margin="2"/>
-
-                                <!-- 27 -->
-                                <TextBlock Grid.Row="27" Grid.Column="0" Text="Level at End" Margin="2"/>
-                                <TextBlock x:Name="levelAtEndMinTB" Grid.Row="27" Grid.Column="1" Margin="2"/>
-                                <TextBlock x:Name="levelAtEndMaxTB" Grid.Row="27" Grid.Column="2" Margin="2"/>
-                                <TextBlock x:Name="levelAtEndAvgTB" Grid.Row="27" Grid.Column="3" Margin="2"/>
-
+                            <Grid>
+                                <DataGrid x:Name="StatsDataGrid" AutoGenerateColumns="False" Margin="10">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="Auto" Header="Property Name" Binding="{Binding PropertyName}" />
+                                        <DataGridTextColumn Width="Auto" Header="Min Value" Binding="{Binding Min}" />
+                                        <DataGridTextColumn Width="Auto" Header="Max Value" Binding="{Binding Max}" />
+                                        <DataGridTextColumn Width="Auto" Header="Average Value" Binding="{Binding Average}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
                         </ScrollViewer>
 

@@ -47,8 +47,8 @@ public partial class MainWindow : Window
         }
     }
 
-    private const string email = "llamawaredatatracking@yahoo.com";
-    private const string appPassword = "Ap0c4lyp53Expr355!";
+    private const string email = "llamawaredatatracking@gmail.com";
+    private const string appPassword = "pkhn xyru dpnt tsvx ";
     private const string csvDumpDirectory = @"C:\CSV_Dump\";
     private const string saveDirectory = @"C:\AggregatedData\";
 
@@ -111,7 +111,7 @@ public partial class MainWindow : Window
     {
         using (var client = new ImapClient())
         {
-            client.Connect("imap.mail.yahoo.com", 993, true);
+            client.Connect("imap.gmail.com", 993, true);
             client.Authenticate(email, appPassword);
 
             var inbox = client.Inbox;
@@ -386,6 +386,11 @@ public partial class MainWindow : Window
 
         AllDataListView.ItemsSource = RunData.Where(r => !r.runWon).ToList();
     }
+
+    private void AllQRB_Click(object sender, RoutedEventArgs e) { }
+    private void QuitRB_Click(object sender, RoutedEventArgs e) { }
+    private void DiedRB_Click(object sender, RoutedEventArgs e) { }
+
     #endregion
 
     #region Update UI Elements
@@ -397,140 +402,141 @@ public partial class MainWindow : Window
 
     private void UpdateBasicAgregatedData(AgregatedData data)
     {
-        // Win Rate group
-        runsLostTB.Text = data.runsLost;
-        runsWonTB.Text = data.runsWon;
-        winRateTB.Text = data.winRate;
+        StatsDataGrid.ItemsSource = data.ProcessBasicData();
+        //// Win Rate group
+        //runsLostTB.Text = data.runsLost;
+        //runsWonTB.Text = data.runsWon;
+        //winRateTB.Text = data.winRate;
 
-        // Easy Locations
-        easyLocationsMinTB.Text = data.easyLocationsMinimum;
-        easyLocationsMaxTB.Text = data.easyLocationsMaximum;
-        easyLocationsAvgTB.Text = data.easyLocationsAverage;
+        //// Easy Locations
+        //easyLocationsMinTB.Text = data.easyLocationsMinimum;
+        //easyLocationsMaxTB.Text = data.easyLocationsMaximum;
+        //easyLocationsAvgTB.Text = data.easyLocationsAverage;
 
-        // Medium Locations
-        mediumLocationsMinTB.Text = data.mediumLocationsMinimum;
-        mediumLocationsMaxTB.Text = data.mediumLocationsMaximum;
-        mediumLocationsAvgTB.Text = data.mediumLocationsAverage;
+        //// Medium Locations
+        //mediumLocationsMinTB.Text = data.mediumLocationsMinimum;
+        //mediumLocationsMaxTB.Text = data.mediumLocationsMaximum;
+        //mediumLocationsAvgTB.Text = data.mediumLocationsAverage;
 
-        // Hard Locations
-        hardLocationsMinTB.Text = data.hardLocationsMinimum;
-        hardLocationsMaxTB.Text = data.hardLocationsMaximum;
-        hardLocationsAvgTB.Text = data.hardLocationsAverage;
+        //// Hard Locations
+        //hardLocationsMinTB.Text = data.hardLocationsMinimum;
+        //hardLocationsMaxTB.Text = data.hardLocationsMaximum;
+        //hardLocationsAvgTB.Text = data.hardLocationsAverage;
 
-        // Cannon Locations
-        cannonLocationsMinTB.Text = data.cannonLocationsMinimum;
-        cannonLocationsMaxTB.Text = data.cannonLocationsMaximum;
-        cannonLocationsAvgTB.Text = data.cannonLocationsAverage;
+        //// Cannon Locations
+        //cannonLocationsMinTB.Text = data.cannonLocationsMinimum;
+        //cannonLocationsMaxTB.Text = data.cannonLocationsMaximum;
+        //cannonLocationsAvgTB.Text = data.cannonLocationsAverage;
 
-        // Module Locations
-        moduleLocationsMinTB.Text = data.moduleLocationsMinimum;
-        moduleLocationsMaxTB.Text = data.moduleLocationsMaximum;
-        moduleLocationsAvgTB.Text = data.moduleLocationsAverage;
+        //// Module Locations
+        //moduleLocationsMinTB.Text = data.moduleLocationsMinimum;
+        //moduleLocationsMaxTB.Text = data.moduleLocationsMaximum;
+        //moduleLocationsAvgTB.Text = data.moduleLocationsAverage;
 
-        // Upgrade Locations
-        upgradeLocationsMinTB.Text = data.upgradeLocationsMinimum;
-        upgradeLocationsMaxTB.Text = data.upgradeLocationsMaximum;
-        upgradeLocationsAvgTB.Text = data.upgradeLocationsAverage;
+        //// Upgrade Locations
+        //upgradeLocationsMinTB.Text = data.upgradeLocationsMinimum;
+        //upgradeLocationsMaxTB.Text = data.upgradeLocationsMaximum;
+        //upgradeLocationsAvgTB.Text = data.upgradeLocationsAverage;
 
-        // Relic Locations
-        relicLocationsMinTB.Text = data.relicLocationsMinimum;
-        relicLocationsMaxTB.Text = data.relicLocationsMaximum;
-        relicLocationsAvgTB.Text = data.relicLocationsAverage;
+        //// Relic Locations
+        //relicLocationsMinTB.Text = data.relicLocationsMinimum;
+        //relicLocationsMaxTB.Text = data.relicLocationsMaximum;
+        //relicLocationsAvgTB.Text = data.relicLocationsAverage;
 
-        // Shop Locations
-        shopLocationsMinTB.Text = data.shopLocationsMinimum;
-        shopLocationsMaxTB.Text = data.shopLocationsMaximum;
-        shopLocationsAvgTB.Text = data.shopLocationsAverage;
+        //// Shop Locations
+        //shopLocationsMinTB.Text = data.shopLocationsMinimum;
+        //shopLocationsMaxTB.Text = data.shopLocationsMaximum;
+        //shopLocationsAvgTB.Text = data.shopLocationsAverage;
 
-        // Scrap Collected
-        scrapCollectedMinTB.Text = data.scrapCollectedMinimum;
-        scrapCollectedMaxTB.Text = data.scrapCollectedMaximum;
-        scrapCollectedAvgTB.Text = data.scrapCollectedAverage;
+        //// Scrap Collected
+        //scrapCollectedMinTB.Text = data.scrapCollectedMinimum;
+        //scrapCollectedMaxTB.Text = data.scrapCollectedMaximum;
+        //scrapCollectedAvgTB.Text = data.scrapCollectedAverage;
 
-        // Ammo Collected
-        ammoCollectedMinTB.Text = data.ammoCollectedMinimum;
-        ammoCollectedMaxTB.Text = data.ammoCollectedMaximum;
-        ammoCollectedAvgTB.Text = data.ammoCollectedAverage;
+        //// Ammo Collected
+        //ammoCollectedMinTB.Text = data.ammoCollectedMinimum;
+        //ammoCollectedMaxTB.Text = data.ammoCollectedMaximum;
+        //ammoCollectedAvgTB.Text = data.ammoCollectedAverage;
 
-        // Scrap Used - Wagons
-        scrapUsedWagonsMinTB.Text = data.scrapUsedWagonsMinimum;
-        scrapUsedWagonsMaxTB.Text = data.scrapUsedWagonsMaximum;
-        scrapUsedWagonsAvgTB.Text = data.scrapUsedWagonsAverage;
+        //// Scrap Used - Wagons
+        //scrapUsedWagonsMinTB.Text = data.scrapUsedWagonsMinimum;
+        //scrapUsedWagonsMaxTB.Text = data.scrapUsedWagonsMaximum;
+        //scrapUsedWagonsAvgTB.Text = data.scrapUsedWagonsAverage;
 
-        // Scrap Used - Ammo
-        scrapUsedAmmoMinTB.Text = data.scrapUsedAmmoMinimum;
-        scrapUsedAmmoMaxTB.Text = data.scrapUsedAmmoMaximum;
-        scrapUsedAmmoAvgTB.Text = data.scrapUsedAmmoAverage;
+        //// Scrap Used - Ammo
+        //scrapUsedAmmoMinTB.Text = data.scrapUsedAmmoMinimum;
+        //scrapUsedAmmoMaxTB.Text = data.scrapUsedAmmoMaximum;
+        //scrapUsedAmmoAvgTB.Text = data.scrapUsedAmmoAverage;
 
-        // Scrap Used - Repair
-        scrapUsedRepairMinTB.Text = data.scrapUsedRepairMinimum;
-        scrapUsedRepairMaxTB.Text = data.scrapUsedRepairMaximum;
-        scrapUsedRepairAvgTB.Text = data.scrapUsedRepairAverage;
+        //// Scrap Used - Repair
+        //scrapUsedRepairMinTB.Text = data.scrapUsedRepairMinimum;
+        //scrapUsedRepairMaxTB.Text = data.scrapUsedRepairMaximum;
+        //scrapUsedRepairAvgTB.Text = data.scrapUsedRepairAverage;
 
-        // Scrap Used - Upgrades
-        scrapUsedUpgradesMinTB.Text = data.scrapUsedUpgradesMinimum;
-        scrapUsedUpgradesMaxTB.Text = data.scrapUsedUpgradesMaximum;
-        scrapUsedUpgradesAvgTB.Text = data.scrapUsedUpgradesAverage;
+        //// Scrap Used - Upgrades
+        //scrapUsedUpgradesMinTB.Text = data.scrapUsedUpgradesMinimum;
+        //scrapUsedUpgradesMaxTB.Text = data.scrapUsedUpgradesMaximum;
+        //scrapUsedUpgradesAvgTB.Text = data.scrapUsedUpgradesAverage;
 
-        // Ammo Used
-        ammoUsedMinTB.Text = data.ammoUsedMinimum;
-        ammoUsedMaxTB.Text = data.ammoUsedMaximum;
-        ammoUsedAvgTB.Text = data.ammoUsedAverage;
+        //// Ammo Used
+        //ammoUsedMinTB.Text = data.ammoUsedMinimum;
+        //ammoUsedMaxTB.Text = data.ammoUsedMaximum;
+        //ammoUsedAvgTB.Text = data.ammoUsedAverage;
 
-        // Bosses Killed
-        bossesKilledMinTB.Text = data.bossesKilledMinimum;
-        bossesKilledMaxTB.Text = data.bossesKilledMaximum;
-        bossesKilledAvgTB.Text = data.bossesKilledAverage;
+        //// Bosses Killed
+        //bossesKilledMinTB.Text = data.bossesKilledMinimum;
+        //bossesKilledMaxTB.Text = data.bossesKilledMaximum;
+        //bossesKilledAvgTB.Text = data.bossesKilledAverage;
 
-        // Final Hull
-        finalHullMinTB.Text = data.finalHullMinimum;
-        finalHullMaxTB.Text = data.finalHullMaximum;
-        finalHullAvgTB.Text = data.finalHullAverage;
+        //// Final Hull
+        //finalHullMinTB.Text = data.finalHullMinimum;
+        //finalHullMaxTB.Text = data.finalHullMaximum;
+        //finalHullAvgTB.Text = data.finalHullAverage;
 
-        // Regular Damage Taken
-        regularDamageTakenMinTB.Text = data.regularDamageTakenMinimum;
-        regularDamageTakenMaxTB.Text = data.regularDamageTakenMaximum;
-        regularDamageTakenAvgTB.Text = data.regularDamageTakenAverage;
+        //// Regular Damage Taken
+        //regularDamageTakenMinTB.Text = data.regularDamageTakenMinimum;
+        //regularDamageTakenMaxTB.Text = data.regularDamageTakenMaximum;
+        //regularDamageTakenAvgTB.Text = data.regularDamageTakenAverage;
 
-        // Hull Damage Taken
-        hullDamageTakenMinTB.Text = data.hullDamageTakenMinimum;
-        hullDamageTakenMaxTB.Text = data.hullDamageTakenMaximum;
-        hullDamageTakenAvgTB.Text = data.hullDamageTakenAverage;
+        //// Hull Damage Taken
+        //hullDamageTakenMinTB.Text = data.hullDamageTakenMinimum;
+        //hullDamageTakenMaxTB.Text = data.hullDamageTakenMaximum;
+        //hullDamageTakenAvgTB.Text = data.hullDamageTakenAverage;
 
-        // Damage Repaired
-        damageRepairedMinTB.Text = data.damageRepairedMinimum;
-        damageRepairedMaxTB.Text = data.damageRepairedMaximum;
-        damageRepairedAvgTB.Text = data.damageRepairedAverage;
+        //// Damage Repaired
+        //damageRepairedMinTB.Text = data.damageRepairedMinimum;
+        //damageRepairedMaxTB.Text = data.damageRepairedMaximum;
+        //damageRepairedAvgTB.Text = data.damageRepairedAverage;
 
-        // Modules Broken
-        modulesBrokenMinTB.Text = data.modulesBrokenMinimum;
-        modulesBrokenMaxTB.Text = data.modulesBrokenMaximum;
-        modulesBrokenAvgTB.Text = data.modulesBrokenAverage;
+        //// Modules Broken
+        //modulesBrokenMinTB.Text = data.modulesBrokenMinimum;
+        //modulesBrokenMaxTB.Text = data.modulesBrokenMaximum;
+        //modulesBrokenAvgTB.Text = data.modulesBrokenAverage;
 
-        // Run Duration
-        runDurationMinTB.Text = data.runDurationMinimum;
-        runDurationMaxTB.Text = data.runDurationMaximum;
-        runDurationAvgTB.Text = data.runDurationAverage;
+        //// Run Duration
+        //runDurationMinTB.Text = data.runDurationMinimum;
+        //runDurationMaxTB.Text = data.runDurationMaximum;
+        //runDurationAvgTB.Text = data.runDurationAverage;
 
-        // Total Runs
-        totalRunsMinTB.Text = data.totalRunsMinimum;
-        totalRunsMaxTB.Text = data.totalRunsMaximum;
-        totalRunsAvgTB.Text = data.totalRunsAverage;
+        //// Total Runs
+        //totalRunsMinTB.Text = data.totalRunsMinimum;
+        //totalRunsMaxTB.Text = data.totalRunsMaximum;
+        //totalRunsAvgTB.Text = data.totalRunsAverage;
 
-        // Total Runs Beaten
-        totalRunsBeatenMinTB.Text = data.totalRunsBeatenMinimum;
-        totalRunsBeatenMaxTB.Text = data.totalRunsBeatenMaximum;
-        totalRunsBeatenAvgTB.Text = data.totalRunsBeatenAverage;
+        //// Total Runs Beaten
+        //totalRunsBeatenMinTB.Text = data.totalRunsBeatenMinimum;
+        //totalRunsBeatenMaxTB.Text = data.totalRunsBeatenMaximum;
+        //totalRunsBeatenAvgTB.Text = data.totalRunsBeatenAverage;
 
-        // Current Cores
-        currentCoresMinTB.Text = data.currentCoresMinimum;
-        currentCoresMaxTB.Text = data.currentCoresMaximum;
-        currentCoresAvgTB.Text = data.currentCoresAverage;
+        //// Current Cores
+        //currentCoresMinTB.Text = data.currentCoresMinimum;
+        //currentCoresMaxTB.Text = data.currentCoresMaximum;
+        //currentCoresAvgTB.Text = data.currentCoresAverage;
 
-        // Level at End
-        levelAtEndMinTB.Text = data.levelAtEndMinimum;
-        levelAtEndMaxTB.Text = data.levelAtEndMaximum;
-        levelAtEndAvgTB.Text = data.levelAtEndAverage;
+        //// Level at End
+        //levelAtEndMinTB.Text = data.levelAtEndMinimum;
+        //levelAtEndMaxTB.Text = data.levelAtEndMaximum;
+        //levelAtEndAvgTB.Text = data.levelAtEndAverage;
     }
 
     private void UpdateListData(AgregatedData data)
