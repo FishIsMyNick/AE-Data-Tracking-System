@@ -3,6 +3,7 @@ using Org.BouncyCastle.Bcpg;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -156,33 +157,44 @@ namespace AE_DataTracker
 
         public List<AggregatedPropertyStats> ProcessBasicData()
         {
-            int totalRuns = runDataList.Count;
+            float totalRuns = runDataList.Count;
             List<AggregatedPropertyStats> basicDataProps = new List<AggregatedPropertyStats>();
+
+            RunData tempRD = new RunData();
 
             foreach (var prop in typeof(RunData).GetProperties())
             {
                 AggregatedPropertyStats aggrData = new AggregatedPropertyStats();
                 aggrData.PropertyName = GetPropertyNameReadable(prop.Name);
-                if (prop.GetType() == typeof(int))
+                if (prop.GetValue(tempRD) is int)
                 {
                     List<int> values = runDataList.Select(item => Convert.ToInt32(prop.GetValue(item))).ToList();
-                    aggrData.Min = values.Min().ToString();
-                    aggrData.Max = values.Max().ToString();
-                    aggrData.Average = values.Average().ToString();
+                    if (values != null && values.Count > 0)
+                    {
+                        aggrData.Min = values.Min().ToString();
+                        aggrData.Max = values.Max().ToString();
+                        aggrData.Average = values.Average().ToString("0.##", CultureInfo.InvariantCulture);
+                    }
                 }
-                else if (prop.GetType() == typeof(float))
+                else if (prop.GetValue(tempRD) is float)
                 {
                     List<float> values = runDataList.Select(item => float.Parse(prop.GetValue(item).ToString())).ToList();
-                    aggrData.Min = values.Min().ToString();
-                    aggrData.Max = values.Max().ToString();
-                    aggrData.Average = values.Average().ToString();
+                    if (values != null && values.Count > 0)
+                    {
+                        aggrData.Min = values.Min().ToString("0.##", CultureInfo.InvariantCulture);
+                        aggrData.Max = values.Max().ToString("0.##", CultureInfo.InvariantCulture);
+                        aggrData.Average = values.Average().ToString("0.##", CultureInfo.InvariantCulture);
+                    }
                 }
-                else if (prop.GetType() == typeof(bool))
+                else if (prop.GetValue(tempRD) is bool)
                 {
                     List<bool> values = runDataList.Select(item => Convert.ToBoolean(prop.GetValue(item))).ToList();
-                    aggrData.Min = values.Min().ToString();
-                    aggrData.Max = values.Max().ToString();
-                    aggrData.Average = $"{(values.Where(v => v).Count() / totalRuns) * 100f}%";
+                    if (values != null && values.Count > 0)
+                    {
+                        aggrData.Min = values.Where(v => !v).Count().ToString();
+                        aggrData.Max = values.Where(v => v).Count().ToString();
+                        aggrData.Average = $"{((values.Where(v => v).Count() / totalRuns) * 100f).ToString("0.##", CultureInfo.InvariantCulture)}%";
+                    }
                 }
                 else
                     continue;
@@ -191,116 +203,6 @@ namespace AE_DataTracker
             }
 
             return basicDataProps;
-
-            int rw = runDataList.Count(r => r.runWon);
-            int rl = runDataList.Count - rw;
-            runsWon = "Runs won: " + rw.ToString();
-            runsLost = "Runs lost: " + rl.ToString();
-            winRate = "Win rate: " + (((float)rw / (rw + rl)) * 100f).ToString("F2") + "%";
-
-            easyLocationsMinimum = runDataList.Min(r => r.easyLocations).ToString();
-            easyLocationsMaximum = runDataList.Max(r => r.easyLocations).ToString();
-            easyLocationsAverage = runDataList.Average(r => r.easyLocations).ToString("F2");
-
-            mediumLocationsMinimum = runDataList.Min(r => r.mediumLocations).ToString();
-            mediumLocationsMaximum = runDataList.Max(r => r.mediumLocations).ToString();
-            mediumLocationsAverage = runDataList.Average(r => r.mediumLocations).ToString("F2");
-
-            hardLocationsMinimum = runDataList.Min(r => r.hardLocations).ToString();
-            hardLocationsMaximum = runDataList.Max(r => r.hardLocations).ToString();
-            hardLocationsAverage = runDataList.Average(r => r.hardLocations).ToString("F2");
-
-            cannonLocationsMinimum = runDataList.Min(r => r.cannonLocations).ToString();
-            cannonLocationsMaximum = runDataList.Max(r => r.cannonLocations).ToString();
-            cannonLocationsAverage = runDataList.Average(r => r.cannonLocations).ToString("F2");
-
-            moduleLocationsMinimum = runDataList.Min(r => r.moduleLocations).ToString();
-            moduleLocationsMaximum = runDataList.Max(r => r.moduleLocations).ToString();
-            moduleLocationsAverage = runDataList.Average(r => r.moduleLocations).ToString("F2");
-
-            upgradeLocationsMinimum = runDataList.Min(r => r.upgradeLocations).ToString();
-            upgradeLocationsMaximum = runDataList.Max(r => r.upgradeLocations).ToString();
-            upgradeLocationsAverage = runDataList.Average(r => r.upgradeLocations).ToString("F2");
-
-            relicLocationsMinimum = runDataList.Min(r => r.relicLocations).ToString();
-            relicLocationsMaximum = runDataList.Max(r => r.relicLocations).ToString();
-            relicLocationsAverage = runDataList.Average(r => r.relicLocations).ToString("F2");
-
-            shopLocationsMinimum = runDataList.Min(r => r.shopLocations).ToString();
-            shopLocationsMaximum = runDataList.Max(r => r.shopLocations).ToString();
-            shopLocationsAverage = runDataList.Average(r => r.shopLocations).ToString("F2");
-
-            levelAtEndMinimum = runDataList.Min(r => r.levelAtEnd).ToString();
-            levelAtEndMaximum = runDataList.Max(r => r.levelAtEnd).ToString();
-            levelAtEndAverage = runDataList.Average(r => r.levelAtEnd).ToString("F2");
-
-            scrapCollectedMinimum = runDataList.Min(r => r.scrapCollected).ToString();
-            scrapCollectedMaximum = runDataList.Max(r => r.scrapCollected).ToString();
-            scrapCollectedAverage = runDataList.Average(r => r.scrapCollected).ToString("F2");
-
-            ammoCollectedMinimum = runDataList.Min(r => r.ammoCollected).ToString();
-            ammoCollectedMaximum = runDataList.Max(r => r.ammoCollected).ToString();
-            ammoCollectedAverage = runDataList.Average(r => r.ammoCollected).ToString("F2");
-
-            scrapUsedWagonsMinimum = runDataList.Min(r => r.scrapUsedWagons).ToString();
-            scrapUsedWagonsMaximum = runDataList.Max(r => r.scrapUsedWagons).ToString();
-            scrapUsedWagonsAverage = runDataList.Average(r => r.scrapUsedWagons).ToString("F2");
-
-            scrapUsedAmmoMinimum = runDataList.Min(r => r.scrapUsedAmmo).ToString();
-            scrapUsedAmmoMaximum = runDataList.Max(r => r.scrapUsedAmmo).ToString();
-            scrapUsedAmmoAverage = runDataList.Average(r => r.scrapUsedAmmo).ToString("F2");
-
-            scrapUsedRepairMinimum = runDataList.Min(r => r.scrapUsedRepair).ToString();
-            scrapUsedRepairMaximum = runDataList.Max(r => r.scrapUsedRepair).ToString();
-            scrapUsedRepairAverage = runDataList.Average(r => r.scrapUsedRepair).ToString("F2");
-
-            scrapUsedUpgradesMinimum = runDataList.Min(r => r.scrapUsedUpgrades).ToString();
-            scrapUsedUpgradesMaximum = runDataList.Max(r => r.scrapUsedUpgrades).ToString();
-            scrapUsedUpgradesAverage = runDataList.Average(r => r.scrapUsedUpgrades).ToString("F2");
-
-            ammoUsedMinimum = runDataList.Min(r => r.ammoUsed).ToString();
-            ammoUsedMaximum = runDataList.Max(r => r.ammoUsed).ToString();
-            ammoUsedAverage = runDataList.Average(r => r.ammoUsed).ToString("F2");
-
-            bossesKilledMinimum = runDataList.Min(r => r.bossesKilled).ToString();
-            bossesKilledMaximum = runDataList.Max(r => r.bossesKilled).ToString();
-            bossesKilledAverage = runDataList.Average(r => r.bossesKilled).ToString("F2");
-
-            finalHullMinimum = runDataList.Min(r => r.finalHull).ToString();
-            finalHullMaximum = runDataList.Max(r => r.finalHull).ToString();
-            finalHullAverage = runDataList.Average(r => r.finalHull).ToString("F2");
-
-            regularDamageTakenMinimum = runDataList.Min(r => r.regularDamageTaken).ToString();
-            regularDamageTakenMaximum = runDataList.Max(r => r.regularDamageTaken).ToString();
-            regularDamageTakenAverage = runDataList.Average(r => r.regularDamageTaken).ToString("F2");
-
-            hullDamageTakenMinimum = runDataList.Min(r => r.hullDamageTaken).ToString();
-            hullDamageTakenMaximum = runDataList.Max(r => r.hullDamageTaken).ToString();
-            hullDamageTakenAverage = runDataList.Average(r => r.hullDamageTaken).ToString("F2");
-
-            damageRepairedMinimum = runDataList.Min(r => r.damageRepaired).ToString();
-            damageRepairedMaximum = runDataList.Max(r => r.damageRepaired).ToString();
-            damageRepairedAverage = runDataList.Average(r => r.damageRepaired).ToString("F2");
-
-            modulesBrokenMinimum = runDataList.Min(r => r.modulesBroken).ToString();
-            modulesBrokenMaximum = runDataList.Max(r => r.modulesBroken).ToString();
-            modulesBrokenAverage = runDataList.Average(r => r.modulesBroken).ToString("F2");
-
-            runDurationMinimum = runDataList.Min(r => r.runDuration).ToString();
-            runDurationMaximum = runDataList.Max(r => r.runDuration).ToString();
-            runDurationAverage = runDataList.Average(r => r.runDuration).ToString("F2");
-
-            totalRunsMinimum = runDataList.Min(r => r.totalRuns).ToString();
-            totalRunsMaximum = runDataList.Max(r => r.totalRuns).ToString();
-            totalRunsAverage = runDataList.Average(r => r.totalRuns).ToString("F2");
-
-            totalRunsBeatenMinimum = runDataList.Min(r => r.totalRunsBeaten).ToString();
-            totalRunsBeatenMaximum = runDataList.Max(r => r.totalRunsBeaten).ToString();
-            totalRunsBeatenAverage = runDataList.Average(r => r.totalRunsBeaten).ToString("F2");
-
-            currentCoresMinimum = runDataList.Min(r => r.currentCoreCount).ToString();
-            currentCoresMaximum = runDataList.Max(r => r.currentCoreCount).ToString();
-            currentCoresAverage = runDataList.Average(r => r.currentCoreCount).ToString("F2");
         }
 
         private AggregatedPropertyStats GetProperyStatsFromStrings(string value, string min, string max, string avg)
@@ -560,8 +462,8 @@ public class ffPair
 
 public class AggregatedPropertyStats
 {
-    public string PropertyName { get; set; }
-    public string Min { get; set; }
-    public string Max { get; set; }
-    public string Average { get; set; }
+    public string PropertyName { get; set; } = "";
+    public string Min { get; set; } = "";
+    public string Max { get; set; } = "";
+    public string Average { get; set; } = "";
 }

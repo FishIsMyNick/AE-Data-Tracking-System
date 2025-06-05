@@ -60,7 +60,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Name="RunsProcessedLabel" Margin="5 0" FontSize="16">Runs processed:</Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                      Margin="0 10 0 0">
+                                      Margin="0 20 0 0">
                             <Grid>
                                 <DataGrid x:Name="StatsDataGrid" AutoGenerateColumns="False" Margin="10">
                                     <DataGrid.Columns>
@@ -88,7 +88,9 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ListView x:Name="AggrModules">
+                                <ListView x:Name="AggrModules"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                              MaxHeight="300">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Module Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
@@ -106,17 +108,22 @@
                                                Background="#eeeeee"
                                                HorizontalAlignment="Left"
                                                PreviewKeyDown="UpgradeFilterTB_PreviewKeyDown"/>
-                                    <ListView x:Name="AggrUpgrades">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="Upgrade Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
-                                            <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value2}" />
-                                            <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value3}" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
+                                    <ListView x:Name="AggrUpgrades"
+                                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                              ScrollViewer.CanContentScroll="True"
+                                              MaxHeight="300">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="Upgrade Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
+                                                <GridViewColumn Header="Total Times Taken" Width="150" DisplayMemberBinding="{Binding Value2}" />
+                                                <GridViewColumn Header="Times Taken %" Width="150" DisplayMemberBinding="{Binding Value3}" />
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
                                 </StackPanel>
-                                <ListView x:Name="AggrRelics" Grid.Row="1">
+                                <ListView x:Name="AggrRelics" Grid.Row="1"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                              MaxHeight="300">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Relic Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
@@ -125,7 +132,9 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <ListView x:Name="AggrRadarUpgrades" Grid.Row="1" Grid.Column="1">
+                                <ListView x:Name="AggrRadarUpgrades" Grid.Row="1" Grid.Column="1"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                              MaxHeight="300">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Radar Upgrade Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
@@ -134,7 +143,9 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <ListView x:Name="AggrDamageByEnemy" Grid.Row="2" Grid.Column="0">
+                                <ListView x:Name="AggrDamageByEnemy" Grid.Row="2" Grid.Column="0"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                              MaxHeight="300">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Enemy Name" Width="150" DisplayMemberBinding="{Binding Value1}" />
@@ -145,7 +156,7 @@
                                 </ListView>
                             </Grid>
 
-                            
+
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -153,45 +164,7 @@
                 <!-- All Data -->
                 <TabItem Header="All Data">
                     <Grid>
-                        <ListView Name="AllDataListView" Grid.Row="1" Margin="10">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Round Won" Width="Auto" DisplayMemberBinding="{Binding runWonString}" />
-                                    <GridViewColumn Header="Easy Locations" Width="Auto" DisplayMemberBinding="{Binding easyLocationsString}" />
-                                    <GridViewColumn Header="Medium Locations" Width="Auto" DisplayMemberBinding="{Binding mediumLocationsString}" />
-                                    <GridViewColumn Header="Hard Locations" Width="Auto" DisplayMemberBinding="{Binding hardLocationsString}" />
-                                    <GridViewColumn Header="Cannon Locations" Width="Auto" DisplayMemberBinding="{Binding cannonLocationsString}" />
-                                    <GridViewColumn Header="Module Locations" Width="Auto" DisplayMemberBinding="{Binding moduleLocationsString}" />
-                                    <GridViewColumn Header="Upgrade Locations" Width="Auto" DisplayMemberBinding="{Binding upgradeLocationsString}" />
-                                    <GridViewColumn Header="Relic Locations" Width="Auto" DisplayMemberBinding="{Binding relicLocationsString}" />
-                                    <GridViewColumn Header="Shop Locations" Width="Auto" DisplayMemberBinding="{Binding shopLocationsString}" />
-                                    <GridViewColumn Header="Level at End" Width="Auto" DisplayMemberBinding="{Binding levelAtEndString}" />
-                                    <GridViewColumn Header="Scrap Collected" Width="Auto" DisplayMemberBinding="{Binding scrapCollectedString}" />
-                                    <GridViewColumn Header="Ammo Collected" Width="Auto" DisplayMemberBinding="{Binding ammoCollectedString}" />
-                                    <GridViewColumn Header="Scrap Used (SU)" Width="Auto" DisplayMemberBinding="{Binding scrapUsedString}" />
-                                    <GridViewColumn Header="SU Wagons" Width="Auto" DisplayMemberBinding="{Binding scrapUsedWagonsString}" />
-                                    <GridViewColumn Header="SU Ammo" Width="Auto" DisplayMemberBinding="{Binding scrapUsedWagonsString}" />
-                                    <GridViewColumn Header="SU Repair" Width="Auto" DisplayMemberBinding="{Binding scrapUsedWagonsString}" />
-                                    <GridViewColumn Header="SU Upgrades" Width="Auto" DisplayMemberBinding="{Binding scrapUsedWagonsString}" />
-                                    <GridViewColumn Header="Ammo Used" Width="Auto" DisplayMemberBinding="{Binding ammoUsedString}" />
-                                    <GridViewColumn Header="Bosses Killed" Width="Auto" DisplayMemberBinding="{Binding bossesKilledString}" />
-                                    <GridViewColumn Header="Hull at End" Width="Auto" DisplayMemberBinding="{Binding finalHullString}" />
-                                    <GridViewColumn Header="Damage Taken Regular" Width="Auto" DisplayMemberBinding="{Binding regularDamageTakenString}" />
-                                    <GridViewColumn Header="Damage Taken Hull" Width="Auto" DisplayMemberBinding="{Binding hullDamageTakenString}" />
-                                    <GridViewColumn Header="Damage Repaired" Width="Auto" DisplayMemberBinding="{Binding damageRepairedString}" />
-                                    <GridViewColumn Header="Modules Broken" Width="Auto" DisplayMemberBinding="{Binding modulesBrokenString}" />
-                                    <GridViewColumn Header="Run Duration" Width="Auto" DisplayMemberBinding="{Binding runDurationString}" />
-                                    <GridViewColumn Header="Total Runs" Width="Auto" DisplayMemberBinding="{Binding totalRunsString}" />
-                                    <GridViewColumn Header="Total Runs Beaten" Width="Auto" DisplayMemberBinding="{Binding totalRunsBeatenString}" />
-                                    <GridViewColumn Header="Current Core #" Width="Auto" DisplayMemberBinding="{Binding currentCoreCountString}" />
-                                    <GridViewColumn Header="Modules Taken" Width="Auto" DisplayMemberBinding="{Binding modulesTakenString}" />
-                                    <GridViewColumn Header="Upgrades Taken" Width="Auto" DisplayMemberBinding="{Binding upgradesTakenString}" />
-                                    <GridViewColumn Header="Relics Taken" Width="Auto" DisplayMemberBinding="{Binding relicsTakenString}" />
-                                    <GridViewColumn Header="Radar Upgrades" Width="Auto" DisplayMemberBinding="{Binding radarUpgradesString}" />
-                                    <GridViewColumn Header="Damage by Enemy" Width="Auto" DisplayMemberBinding="{Binding damageByEnemyString}" />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <DataGrid x:Name="DataTableGrid" AutoGenerateColumns="True" Margin="10"/>
                     </Grid>
                 </TabItem>
             </TabControl>

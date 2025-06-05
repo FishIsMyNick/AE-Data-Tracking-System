@@ -4,11 +4,15 @@ using MailKit.Search;
 using MimeKit;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net.Mail;
+using System.Reflection;
 using System.Security.RightsManagement;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -56,39 +60,26 @@ public partial class MainWindow : Window
     {
         StatusLabel.Content = "Loading...";
 
-        if (Directory.Exists(csvDumpDirectory))
-        {
-            foreach (string file in Directory.GetFiles(csvDumpDirectory))
-            {
-                File.Delete(file);
-            }
-        }
+        //if (Directory.Exists(csvDumpDirectory))
+        //{
+        //    foreach (string file in Directory.GetFiles(csvDumpDirectory))
+        //    {
+        //        File.Delete(file);
+        //    }
+        //}
 
         GetDataFromEmail();
 
-        // All data
-        AllDataListView.ItemsSource = RunData;
 
         // Agregated data
         agregatedData = new AgregatedData();
-        if (AllRB.IsChecked == true)
-        {
-            agregatedData.InitializeData(RunData);
-            AllDataListView.ItemsSource = RunData;
-        }
-        else if (WinRB.IsChecked == true)
-        {
-            agregatedData.InitializeData(RunData.Where(r => r.runWon).ToList());
-            AllDataListView.ItemsSource = RunData.Where(r => r.runWon).ToList();
-        }
-        else if (LossRB.IsChecked == true)
-        {
-            agregatedData.InitializeData(RunData.Where(r => !r.runWon).ToList());
-            AllDataListView.ItemsSource = RunData.Where(r => !r.runWon).ToList();
-        }
+        agregatedData.InitializeData(RunData);
+        ProcessRadioButtonFilters();
         agregatedData.firstEntry = firstEntry;
         agregatedData.lastEntry = lastEntry;
         UpdateAggregatedData(agregatedData);
+        // All data
+        UpdateAllDataTable();
 
         RunsProcessedLabel.Content = $"Runs processed: {agregatedData.runDataList.Count}";
 
@@ -97,7 +88,7 @@ public partial class MainWindow : Window
 
     private void GetDataFromEmail()
     {
-        CollectCsvAttachments();
+        //CollectCsvAttachments();
 
         string[] csvs = LoadAllFilesFromDirectory();
 
@@ -252,7 +243,7 @@ public partial class MainWindow : Window
 
         agregatedData = null;
         UpdateAggregatedData(new AgregatedData());
-        AllDataListView.ItemsSource = new List<RunData>();
+        DataTableGrid.ItemsSource = new List<RunData>();
     }
 
     private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -356,44 +347,63 @@ public partial class MainWindow : Window
         return allContents;
     }
 
-    #region Radio Buttons
-    private void AllRB_Click(object sender, RoutedEventArgs e)
-    {
-        if (RunData == null || RunData.Count == 0)
-            return;
-        agregatedData.InitializeData(RunData);
-        UpdateAggregatedData(agregatedData);
-
-        AllDataListView.ItemsSource = RunData;
-    }
-
-    private void WinRB_Click(object sender, RoutedEventArgs e)
-    {
-        if (RunData == null || RunData.Count == 0)
-            return;
-        agregatedData.InitializeData(RunData.Where(r => r.runWon).ToList());
-        UpdateAggregatedData(agregatedData);
-
-        AllDataListView.ItemsSource = RunData.Where(r => r.runWon).ToList();
-    }
-
-    private void LossRB_Click(object sender, RoutedEventArgs e)
-    {
-        if (RunData == null || RunData.Count == 0)
-            return;
-        agregatedData.InitializeData(RunData.Where(r => !r.runWon).ToList());
-        UpdateAggregatedData(agregatedData);
-
-        AllDataListView.ItemsSource = RunData.Where(r => !r.runWon).ToList();
-    }
-
-    private void AllQRB_Click(object sender, RoutedEventArgs e) { }
-    private void QuitRB_Click(object sender, RoutedEventArgs e) { }
-    private void DiedRB_Click(object sender, RoutedEventArgs e) { }
-
-    #endregion
 
     #region Update UI Elements
+
+    public DataTable ConvertToDataTable<T>(List<T> items)
+    {
+        var table = new DataTable();
+        var type = typeof(T);
+
+        // Use fields instead of properties
+        var props = type.GetProperties();
+
+        // Create columns
+        foreach (var prop in props)
+        {
+            table.Columns.Add(prop.Name, typeof(string));
+        }
+
+        // Create rows
+        foreach (var item in items)
+        {
+            var row = table.NewRow();
+            foreach (var prop in props)
+            {
+                var value = prop.GetValue(item);
+                if (value is int iValue)
+                {
+                    row[prop.Name] = iValue.ToString();
+                }
+                else if (value is float fValue)
+                {
+                    row[prop.Name] = fValue.ToString("0.##", CultureInfo.InvariantCulture);
+                }
+                else if (value is bool bValue)
+                {
+                    row[prop.Name] = bValue.ToString();
+                }
+                else if(value is List<string> lValue)
+                {
+                    if (lValue.Count > 0)
+                        row[prop.Name] = string.Join(',', lValue);
+                    else
+                        row[prop.Name] = "";
+                }
+                else if(value is Dictionary<string, float> dValue)
+                {
+                    if(dValue.Count > 0)
+                        row[prop.Name] = string.Join(", ", dValue.Select(k => $"{k.Key}: {k.Value}"));
+                    else
+                        row[prop.Name] = "";
+                }
+            }
+            table.Rows.Add(row);
+        }
+
+        return table;
+    }
+
     private void UpdateAggregatedData(AgregatedData data)
     {
         UpdateBasicAgregatedData(data);
@@ -403,140 +413,6 @@ public partial class MainWindow : Window
     private void UpdateBasicAgregatedData(AgregatedData data)
     {
         StatsDataGrid.ItemsSource = data.ProcessBasicData();
-        //// Win Rate group
-        //runsLostTB.Text = data.runsLost;
-        //runsWonTB.Text = data.runsWon;
-        //winRateTB.Text = data.winRate;
-
-        //// Easy Locations
-        //easyLocationsMinTB.Text = data.easyLocationsMinimum;
-        //easyLocationsMaxTB.Text = data.easyLocationsMaximum;
-        //easyLocationsAvgTB.Text = data.easyLocationsAverage;
-
-        //// Medium Locations
-        //mediumLocationsMinTB.Text = data.mediumLocationsMinimum;
-        //mediumLocationsMaxTB.Text = data.mediumLocationsMaximum;
-        //mediumLocationsAvgTB.Text = data.mediumLocationsAverage;
-
-        //// Hard Locations
-        //hardLocationsMinTB.Text = data.hardLocationsMinimum;
-        //hardLocationsMaxTB.Text = data.hardLocationsMaximum;
-        //hardLocationsAvgTB.Text = data.hardLocationsAverage;
-
-        //// Cannon Locations
-        //cannonLocationsMinTB.Text = data.cannonLocationsMinimum;
-        //cannonLocationsMaxTB.Text = data.cannonLocationsMaximum;
-        //cannonLocationsAvgTB.Text = data.cannonLocationsAverage;
-
-        //// Module Locations
-        //moduleLocationsMinTB.Text = data.moduleLocationsMinimum;
-        //moduleLocationsMaxTB.Text = data.moduleLocationsMaximum;
-        //moduleLocationsAvgTB.Text = data.moduleLocationsAverage;
-
-        //// Upgrade Locations
-        //upgradeLocationsMinTB.Text = data.upgradeLocationsMinimum;
-        //upgradeLocationsMaxTB.Text = data.upgradeLocationsMaximum;
-        //upgradeLocationsAvgTB.Text = data.upgradeLocationsAverage;
-
-        //// Relic Locations
-        //relicLocationsMinTB.Text = data.relicLocationsMinimum;
-        //relicLocationsMaxTB.Text = data.relicLocationsMaximum;
-        //relicLocationsAvgTB.Text = data.relicLocationsAverage;
-
-        //// Shop Locations
-        //shopLocationsMinTB.Text = data.shopLocationsMinimum;
-        //shopLocationsMaxTB.Text = data.shopLocationsMaximum;
-        //shopLocationsAvgTB.Text = data.shopLocationsAverage;
-
-        //// Scrap Collected
-        //scrapCollectedMinTB.Text = data.scrapCollectedMinimum;
-        //scrapCollectedMaxTB.Text = data.scrapCollectedMaximum;
-        //scrapCollectedAvgTB.Text = data.scrapCollectedAverage;
-
-        //// Ammo Collected
-        //ammoCollectedMinTB.Text = data.ammoCollectedMinimum;
-        //ammoCollectedMaxTB.Text = data.ammoCollectedMaximum;
-        //ammoCollectedAvgTB.Text = data.ammoCollectedAverage;
-
-        //// Scrap Used - Wagons
-        //scrapUsedWagonsMinTB.Text = data.scrapUsedWagonsMinimum;
-        //scrapUsedWagonsMaxTB.Text = data.scrapUsedWagonsMaximum;
-        //scrapUsedWagonsAvgTB.Text = data.scrapUsedWagonsAverage;
-
-        //// Scrap Used - Ammo
-        //scrapUsedAmmoMinTB.Text = data.scrapUsedAmmoMinimum;
-        //scrapUsedAmmoMaxTB.Text = data.scrapUsedAmmoMaximum;
-        //scrapUsedAmmoAvgTB.Text = data.scrapUsedAmmoAverage;
-
-        //// Scrap Used - Repair
-        //scrapUsedRepairMinTB.Text = data.scrapUsedRepairMinimum;
-        //scrapUsedRepairMaxTB.Text = data.scrapUsedRepairMaximum;
-        //scrapUsedRepairAvgTB.Text = data.scrapUsedRepairAverage;
-
-        //// Scrap Used - Upgrades
-        //scrapUsedUpgradesMinTB.Text = data.scrapUsedUpgradesMinimum;
-        //scrapUsedUpgradesMaxTB.Text = data.scrapUsedUpgradesMaximum;
-        //scrapUsedUpgradesAvgTB.Text = data.scrapUsedUpgradesAverage;
-
-        //// Ammo Used
-        //ammoUsedMinTB.Text = data.ammoUsedMinimum;
-        //ammoUsedMaxTB.Text = data.ammoUsedMaximum;
-        //ammoUsedAvgTB.Text = data.ammoUsedAverage;
-
-        //// Bosses Killed
-        //bossesKilledMinTB.Text = data.bossesKilledMinimum;
-        //bossesKilledMaxTB.Text = data.bossesKilledMaximum;
-        //bossesKilledAvgTB.Text = data.bossesKilledAverage;
-
-        //// Final Hull
-        //finalHullMinTB.Text = data.finalHullMinimum;
-        //finalHullMaxTB.Text = data.finalHullMaximum;
-        //finalHullAvgTB.Text = data.finalHullAverage;
-
-        //// Regular Damage Taken
-        //regularDamageTakenMinTB.Text = data.regularDamageTakenMinimum;
-        //regularDamageTakenMaxTB.Text = data.regularDamageTakenMaximum;
-        //regularDamageTakenAvgTB.Text = data.regularDamageTakenAverage;
-
-        //// Hull Damage Taken
-        //hullDamageTakenMinTB.Text = data.hullDamageTakenMinimum;
-        //hullDamageTakenMaxTB.Text = data.hullDamageTakenMaximum;
-        //hullDamageTakenAvgTB.Text = data.hullDamageTakenAverage;
-
-        //// Damage Repaired
-        //damageRepairedMinTB.Text = data.damageRepairedMinimum;
-        //damageRepairedMaxTB.Text = data.damageRepairedMaximum;
-        //damageRepairedAvgTB.Text = data.damageRepairedAverage;
-
-        //// Modules Broken
-        //modulesBrokenMinTB.Text = data.modulesBrokenMinimum;
-        //modulesBrokenMaxTB.Text = data.modulesBrokenMaximum;
-        //modulesBrokenAvgTB.Text = data.modulesBrokenAverage;
-
-        //// Run Duration
-        //runDurationMinTB.Text = data.runDurationMinimum;
-        //runDurationMaxTB.Text = data.runDurationMaximum;
-        //runDurationAvgTB.Text = data.runDurationAverage;
-
-        //// Total Runs
-        //totalRunsMinTB.Text = data.totalRunsMinimum;
-        //totalRunsMaxTB.Text = data.totalRunsMaximum;
-        //totalRunsAvgTB.Text = data.totalRunsAverage;
-
-        //// Total Runs Beaten
-        //totalRunsBeatenMinTB.Text = data.totalRunsBeatenMinimum;
-        //totalRunsBeatenMaxTB.Text = data.totalRunsBeatenMaximum;
-        //totalRunsBeatenAvgTB.Text = data.totalRunsBeatenAverage;
-
-        //// Current Cores
-        //currentCoresMinTB.Text = data.currentCoresMinimum;
-        //currentCoresMaxTB.Text = data.currentCoresMaximum;
-        //currentCoresAvgTB.Text = data.currentCoresAverage;
-
-        //// Level at End
-        //levelAtEndMinTB.Text = data.levelAtEndMinimum;
-        //levelAtEndMaxTB.Text = data.levelAtEndMaximum;
-        //levelAtEndAvgTB.Text = data.levelAtEndAverage;
     }
 
     private void UpdateListData(AgregatedData data)
@@ -547,6 +423,74 @@ public partial class MainWindow : Window
         AggrRadarUpgrades.ItemsSource = GetSortedCollectionFromDict(data.radarAggr);
         AggrDamageByEnemy.ItemsSource = GetSortedCollectionFromDict(data.damageByEnemyAggr);
     }
+
+    private void UpdateAllDataTable()
+    {
+        DataTableGrid.ItemsSource = ConvertToDataTable<RunData>(RunData).DefaultView;
+    }
+
+    private void UpdateAllDataTable(List<RunData> data)
+    {
+        DataTableGrid.ItemsSource = ConvertToDataTable<RunData>(data).DefaultView;
+    }
+    #endregion
+
+    #region Radio Buttons
+    private void ProcessRadioButtonFilters()
+    {
+        if (RunData == null || RunData.Count == 0)
+            return;
+
+        List<RunData> filteredList = new List<RunData>(RunData);
+        if ((bool)WinRB.IsChecked)
+        {
+            filteredList = filteredList.Where(e => e.runWon).ToList();
+        }
+        else if ((bool)LossRB.IsChecked)
+        {
+            filteredList = filteredList.Where(e => !e.runWon).ToList();
+        }
+        if ((bool)QuitRB.IsChecked)
+        {
+            filteredList = filteredList.Where(e => e.runQuit).ToList();
+        }
+        else if ((bool)DiedRB.IsChecked)
+        {
+            filteredList = filteredList.Where(e => !e.runQuit).ToList();
+        }
+        agregatedData.InitializeData(filteredList);
+        UpdateAggregatedData(agregatedData);
+        UpdateAllDataTable(filteredList);
+    }
+
+    private void AllRB_Click(object sender, RoutedEventArgs e)
+    {
+        ProcessRadioButtonFilters();
+    }
+
+    private void WinRB_Click(object sender, RoutedEventArgs e)
+    {
+        ProcessRadioButtonFilters();
+    }
+
+    private void LossRB_Click(object sender, RoutedEventArgs e)
+    {
+        ProcessRadioButtonFilters();
+    }
+
+    private void AllQRB_Click(object sender, RoutedEventArgs e)
+    {
+        ProcessRadioButtonFilters();
+    }
+    private void QuitRB_Click(object sender, RoutedEventArgs e)
+    {
+        ProcessRadioButtonFilters();
+    }
+    private void DiedRB_Click(object sender, RoutedEventArgs e)
+    {
+        ProcessRadioButtonFilters();
+    }
+
     #endregion
 
     #region Sorting and Filtering
