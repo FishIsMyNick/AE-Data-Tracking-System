@@ -268,7 +268,7 @@ public partial class MainWindow : Window
 
         RunData runData = new RunData()
         {
-            runWon = kvps["RunWon"] == "True" ? true : false,
+            runWon = kvps["runWon"] == "True" ? true : false,
             modulesTaken = new List<string>(),
             upgradesTaken = new List<string>(),
             relicsTaken = new List<string>(),
