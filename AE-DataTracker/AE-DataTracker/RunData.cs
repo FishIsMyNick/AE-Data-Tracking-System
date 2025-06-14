@@ -4,36 +4,36 @@ using System.Collections.Generic;
 [System.Serializable]
 public class RunData
 {
-    public bool runWon { get; set; } // "Win" or "Loss"
-    public bool runQuit { get; set; }
-    public int easyLocations { get; set; }
-    public int mediumLocations { get; set; }
-    public int hardLocations { get; set; }
-    public int cannonLocations { get; set; }
-    public int moduleLocations { get; set; }
-    public int upgradeLocations { get; set; }
-    public int relicLocations { get; set; }
-    public int shopLocations { get; set; }
-    public int levelAtEnd { get; set; }
-    public int scrapCollected { get; set; }
-    public int scrapUsed { get; set; }
-    public int scrapUsedWagons { get; set; }
-    public int scrapUsedAmmo { get; set; }
-    public int scrapUsedRepair { get; set; }
-    public int scrapUsedUpgrades { get; set; }
-    public int ammoCollected { get; set; }
-    public int ammoUsed { get; set; }
-    public int scrapUsedAsAmmo { get; set; }
-    public int bossesKilled { get; set; }
+    public bool runWon; // "Win" or "Loss"
+    public bool runQuit;
+    public int easyLocations;
+    public int mediumLocations;
+    public int hardLocations;
+    public int cannonLocations;
+    public int moduleLocations;
+    public int upgradeLocations;
+    public int relicLocations;
+    public int shopLocations;
+    public int levelAtEnd;
+    public int scrapCollected;
+    public int scrapUsed;
+    public int scrapUsedWagons;
+    public int scrapUsedAmmo;   
+    public int scrapUsedRepair;
+    public int scrapUsedUpgrades;
+    public int ammoCollected;
+    public int ammoUsed;
+    public int scrapUsedAsAmmo;
+    public int bossesKilled;
     public float finalHull { get; set; }
     public float regularDamageTaken { get; set; }
     public float hullDamageTaken { get; set; }
     public float damageRepaired { get; set; }
-    public int modulesBroken { get; set; }
+    public int modulesBroken;
     public float runDuration { get; set; } // in seconds
-    public int totalRuns { get; set; }
-    public int totalRunsBeaten { get; set; }
-    public int currentCoreCount { get; set; }
+    public int totalRuns;
+    public int totalRunsBeaten;
+    public int currentCoreCount;        
     public Dictionary<string, float> damageByEnemy { get; set; }
     public List<string> modulesTaken { get; set; }
     public List<string> upgradesTaken { get; set; }

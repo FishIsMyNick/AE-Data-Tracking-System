@@ -30,6 +30,7 @@ namespace AE_DataTracker;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private bool useLocalData = false;
     public AgregatedData agregatedData;
     public DateTime firstEntry;
     public DateTime lastEntry;
@@ -55,7 +56,7 @@ public partial class MainWindow : Window
     private const string fishEmail = "luxlupus1997@gmail.com";
     private const string appPassword = "pkhn xyru dpnt tsvx ";
     private const string fishAppPassword = "ovaw ejhk liis ohai ";
-    
+
     private const string csvDumpDirectory = @"C:\CSV_Dump\";
     private const string saveDirectory = @"C:\AggregatedData\";
 
@@ -63,15 +64,23 @@ public partial class MainWindow : Window
     {
         StatusLabel.Content = "Loading...";
 
-            if (Directory.Exists(csvDumpDirectory))
+        if (Directory.Exists(csvDumpDirectory))
+        {
+            if (!useLocalData)
             {
                 foreach (string file in Directory.GetFiles(csvDumpDirectory))
                 {
                     File.Delete(file);
                 }
             }
+        }
 
-             GetDataFromEmail();
+        try
+        {
+            if (!useLocalData)
+                GetDataFromEmail();
+
+            LoadAndParseLocalData();
 
             // Agregated data
             agregatedData = new AgregatedData();
@@ -84,15 +93,23 @@ public partial class MainWindow : Window
             UpdateAllDataTable();
 
             RunsProcessedLabel.Content = $"Runs processed: {agregatedData.runDataList.Count}";
+        }
+        catch (AggregateException ex)
+        {
+            MessageBox.Show(ex.Message, "CSV parsing error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
 
-            StatusLabel.Content = "";
+        StatusLabel.Content = "";
     }
 
 
     private void GetDataFromEmail()
     {
         CollectCsvAttachments();
+    }
 
+    private void LoadAndParseLocalData()
+    {
         string[] csvs = LoadAllFilesFromDirectory();
 
         RunData = new List<RunData>();
@@ -106,7 +123,7 @@ public partial class MainWindow : Window
         using (var client = new ImapClient())
         {
             client.Connect("imap.gmail.com", 993, true);
-            client.Authenticate(fishEmail, fishAppPassword);
+            client.Authenticate(email, appPassword);
 
             var inbox = client.Inbox;
             inbox.Open(FolderAccess.ReadWrite);
@@ -260,6 +277,18 @@ public partial class MainWindow : Window
         string[] kvs = csv.Split('\n');
         string[] keys = kvs[0].Trim('\r').Split(',');
         string[] values = kvs[1].Trim('\r').Split(',');
+
+        if (keys.Length != values.Length)
+        {
+            throw new AggregateException("Keys and values can't be mapped due to different sizes. CSV is not in a correct format.");
+        }
+        FieldInfo[] props = RunData.GetType().GetFields();
+        foreach (var field in props)
+        {
+            if (!keys.Contains(field.Name))
+                throw new AggregateException($"CSV keys and RunData fields do no match. Conflicting RunData field: {field.Name}.");
+        }
+
         Dictionary<string, string> kvps = new Dictionary<string, string>();
         for (int i = 0; i < keys.Length; i++)
         {
@@ -387,16 +416,16 @@ public partial class MainWindow : Window
                 {
                     row[prop.Name] = bValue.ToString();
                 }
-                else if(value is List<string> lValue)
+                else if (value is List<string> lValue)
                 {
                     if (lValue.Count > 0)
                         row[prop.Name] = string.Join(',', lValue);
                     else
                         row[prop.Name] = "";
                 }
-                else if(value is Dictionary<string, float> dValue)
+                else if (value is Dictionary<string, float> dValue)
                 {
-                    if(dValue.Count > 0)
+                    if (dValue.Count > 0)
                         row[prop.Name] = string.Join(", ", dValue.Select(k => $"{k.Key}: {k.Value}"));
                     else
                         row[prop.Name] = "";

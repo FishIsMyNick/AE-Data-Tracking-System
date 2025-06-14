@@ -330,6 +330,13 @@ namespace AE_DataTracker
 
         private void Populate0Values()
         {
+            modulesAggr = new Dictionary<string, ifPair>();
+            upgradesAggr = new Dictionary<string, ifPair>();
+            relicsAggr = new Dictionary<string, ifPair>();
+            locationsAggr = new Dictionary<string, ifPair>();
+            radarAggr = new Dictionary<string, ifPair>();
+            damageByEnemyAggr = new Dictionary<string, ffPair>();
+
             runsWon = "N/A";
             runsLost = "N/A";
             winRate = "N/A";
