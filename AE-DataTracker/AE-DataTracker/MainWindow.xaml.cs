@@ -52,7 +52,10 @@ public partial class MainWindow : Window
     }
 
     private const string email = "llamawaredatatracking@gmail.com";
+    private const string fishEmail = "luxlupus1997@gmail.com";
     private const string appPassword = "pkhn xyru dpnt tsvx ";
+    private const string fishAppPassword = "ovaw ejhk liis ohai ";
+    
     private const string csvDumpDirectory = @"C:\CSV_Dump\";
     private const string saveDirectory = @"C:\AggregatedData\";
 
@@ -103,7 +106,7 @@ public partial class MainWindow : Window
         using (var client = new ImapClient())
         {
             client.Connect("imap.gmail.com", 993, true);
-            client.Authenticate(email, appPassword);
+            client.Authenticate(fishEmail, fishAppPassword);
 
             var inbox = client.Inbox;
             inbox.Open(FolderAccess.ReadWrite);
